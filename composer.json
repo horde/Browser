@@ -16,7 +16,7 @@
             "role": "developer"
         }
     ],
-    "version": "2.0.15",
+    "version": "2.0.16",
     "time": "2017-09-19",
     "repositories": [
         {
@@ -26,9 +26,9 @@
     ],
     "require": {
         "php": "^5.3 || ^7",
-        "pear-pear.horde.org/Horde_Exception": "^2@stable",
-        "pear-pear.horde.org/Horde_Translation": "^2.2@stable",
-        "pear-pear.horde.org/Horde_Util": "^2@stable"
+        "pear-pear.horde.org/Horde_Exception": "^2",
+        "pear-pear.horde.org/Horde_Translation": "^2.2",
+        "pear-pear.horde.org/Horde_Util": "^2"
     },
     "replace": {
         "pear-pear.horde.org/Horde_Browser": "2.*",
