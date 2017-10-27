@@ -1,0 +1,274 @@
+-----------
+v2.0.16-git
+-----------
+
+
+-------
+v2.0.15
+-------
+
+[jan] Mark PHP 7 as supported.
+
+
+-------
+v2.0.14
+-------
+
+[jan] Filter out control characters from file names when sending download
+      headers.
+
+
+-------
+v2.0.13
+-------
+
+[jan] Update German translation.
+
+
+-------
+v2.0.12
+-------
+
+[jan] Update Greek translation (Limperis Antonis <limperis@cti.gr>).
+
+
+-------
+v2.0.11
+-------
+
+[mjr] Don't set the empty_file_input_value quirk for recent Safari versions
+      (Bug #14207).
+
+
+-------
+v2.0.10
+-------
+
+[jan] Fix Composer file.
+[jan] Updated UK translation.
+
+
+------
+v2.0.9
+------
+
+[jan] Fix issues with certain locales like Turkish.
+
+
+------
+v2.0.8
+------
+
+[jan] Consider all user agents with "bot" in the name as robots.
+
+
+------
+v2.0.7
+------
+
+[mms] Correctly identify MSIE 11.
+
+
+------
+v2.0.6
+------
+
+[mms] Fix checking for upload errors if an array of files was uploaded.
+[mms] Catch newer PHP upload errors when checking for upload data.
+
+
+------
+v2.0.5
+------
+
+[mms] Detect Internet Explorer 11.
+
+
+------
+v2.0.4
+------
+
+[mms] Detect stock N900 browser as mobile browser (Request #12613; Thomas
+      Jarosch <thomas.jarosch@intra2net.com>).
+
+
+------
+v2.0.3
+------
+
+[jan] Update Basque translation (Ibon Igartua <ibon.igartua@ehu.es>).
+[mjr] Properly detect mobile Chrome on iOS (Bug #11868).
+
+
+------
+v2.0.2
+------
+
+[mms] Add tablet detection/reporting.
+
+
+------
+v2.0.1
+------
+
+[jan] Update Dutch translation (Arjen de Korte <build+horde@de-korte.org>).
+
+
+------
+v2.0.0
+------
+
+First stable release for Horde 5.
+
+
+---------
+v2.0.0RC1
+---------
+
+[mms] Fix error message displaying the maximimum allowed file upload size.
+
+
+-----------
+v2.0.0beta2
+-----------
+
+[mms] Improved detection of mobile browsers (leena.heino@uta.fi, Request
+      #11328).
+
+
+-----------
+v2.0.0beta1
+-----------
+
+First beta release for Horde 5.
+
+
+------------
+v2.0.0alpha1
+------------
+
+First alpha release for Horde 5.
+
+
+------
+v1.0.8
+------
+
+[mms] Add recognition of Firefox for Android as a mobile browser (Request
+      #11216).
+
+
+------
+v1.0.7
+------
+
+[mms] Added the 'ajax' browser feature.
+
+
+------
+v1.0.6
+------
+
+[mms] Fix upload_tmp_dir checking (Bug #10976).
+[mms] Update dataurl and cite capabilities for Internet Explorer.
+[jan] Update utf capability for Firefox 10+.
+
+
+------
+v1.0.5
+------
+
+[jan] Update capabilities for recent Blackberry devices.
+
+
+------
+v1.0.4
+------
+
+[jan] Fix empty_file_input_value quirk for Chrome browsers (Bug #8438).
+
+
+------
+v1.0.3
+------
+
+[jan] Update Latvian translation.
+
+
+------
+v1.0.2
+------
+
+[jan] Update Lithuanian translation.
+[jan] Update Brazilian Portuguese translation.
+
+
+------
+v1.0.1
+------
+
+[jan] Updated Slovak translation.
+[jan] Updated Spanish translation.
+
+
+------
+v1.0.0
+------
+
+First stable release for Horde 4.
+
+
+---------
+v1.0.0RC3
+---------
+
+Add missing replace task.
+
+
+---------
+v1.0.0RC2
+---------
+
+Second release candidate for Horde 4.
+Add translations.
+
+
+---------
+v1.0.0RC1
+---------
+
+First release candidate for Horde 4.
+
+
+-----------
+v1.0.0beta1
+-----------
+
+First beta release for Horde 4.
+
+
+------------
+v1.0.0alpha1
+------------
+
+First alpha release for Horde 4.
+Add Horde_Browser::setMobile().
+Remove PEAR and horde/Core dependencies.
+Remove Horde_Browser::escapeJSCode().
+Add Horde_Browser_Exception.
+
+
+------
+v0.0.2
+------
+
+Converted to package.xml 2.0 for pear.horde.org
+Add Opera Mobile detection (Request #4953)
+Add Grundig and NetFront detection (Request #5269)
+
+
+------
+v0.0.1
+------
+
+Initial packaging
