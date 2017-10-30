@@ -16,7 +16,7 @@
   <email>slusarz@horde.org</email>
   <active>yes</active>
  </developer>
- <date>2017-09-19</date>
+ <date>2017-10-30</date>
  <version>
   <release>2.0.16</release>
   <api>1.0.0</api>
@@ -34,6 +34,7 @@
    <dir name="doc">
     <dir name="Horde">
      <dir name="Browser">
+      <file name="CHANGES" role="doc" />
       <file name="COPYING" role="doc" />
      </dir> <!-- /doc/Horde/Browser -->
     </dir> <!-- /doc/Horde -->
@@ -341,6 +342,7 @@
  </dependencies>
  <phprelease>
   <filelist>
+   <install as="CHANGES" name="doc/Horde/Browser/CHANGES" />
    <install as="COPYING" name="doc/Horde/Browser/COPYING" />
    <install as="Horde/Browser.php" name="lib/Horde/Browser.php" />
    <install as="Horde/Browser/Exception.php" name="lib/Horde/Browser/Exception.php" />
@@ -939,7 +941,7 @@
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-09-19</date>
+   <date>2017-10-30</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
 * 
