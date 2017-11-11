@@ -15,6 +15,12 @@ authors:
     email: chuck@horde.org
     active: true
     role: lead
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: false
+    role: developer
 version:
   release: 2.0.16
   api: 1.0.0
