@@ -27,7 +27,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
-*
+* [mjr] Fix uploads being disabled when post_max_upload is set to 0 in php.ini.
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -1001,8 +1001,7 @@
    <date>2017-10-17</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
-* ./
-* ./
+* [mjr] Fix uploads being disabled when post_max_upload is set to 0 in php.ini.
    </notes>
   </release>
  </changelog>
