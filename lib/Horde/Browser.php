@@ -1103,7 +1103,11 @@ class Horde_Browser
             break;
         }
 
-        return min($filesize, $postsize);
+        // post_max_size == 0 disables the limit .
+        // http://php.net/manual/en/ini.core.php#ini.post-max-size
+        return $postsize == 0
+            ? $filesize
+            : min($filesize, $postsize);
     }
 
     /**
