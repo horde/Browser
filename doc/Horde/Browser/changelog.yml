@@ -8,7 +8,9 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes:
+  notes: |+
+    [mjr] Fix uploads being disabled when post_max_upload is set to 0 in php.ini.
+    
 2.0.15:
   api: 1.0.0
   state:
