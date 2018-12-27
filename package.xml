@@ -16,7 +16,7 @@
   <email>slusarz@horde.org</email>
   <active>no</active>
  </developer>
- <date>2017-11-14</date>
+ <date>2018-12-27</date>
  <version>
   <release>2.0.16</release>
   <api>1.0.0</api>
@@ -998,7 +998,7 @@
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2017-10-17</date>
+   <date>2018-12-27</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
 * [mjr] Fix uploads being disabled when post_max_upload is set to 0 in php.ini.
