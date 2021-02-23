@@ -26,10 +26,10 @@
     ],
     "require": {
         "horde/horde-installer-plugin": "*",
-        "php": "^5.3 || ^7",
-        "horde/exception": "^2",
-        "horde/translation": "^2.2",
-        "horde/util": "^2"
+        "php": "^7",
+        "horde/Exception": "^3",
+        "horde/Translation": "^3",
+        "horde/Util": "^3"
     },
     "suggest": {},
     "autoload": {
