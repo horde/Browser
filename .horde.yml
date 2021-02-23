@@ -3,8 +3,8 @@ id: Browser
 name: Browser
 full: Browser detection library
 description: >-
-  A library for getting information about the
-  current user's browser and its capabilities.
+  A library for getting information about the current user's browser and its
+  capabilities.
 list: dev
 type: library
 homepage: https://www.horde.org/libraries/Horde_Browser
@@ -22,11 +22,11 @@ authors:
     active: false
     role: developer
 version:
-  release: 2.0.16
-  api: 1.0.0
+  release: 3.0.0alpha1
+  api: 3.0.0alpha1
 state:
-  release: stable
-  api: stable
+  release: alpha
+  api: alpha
 license:
   identifier: LGPL-2.1
   uri: http://www.horde.org/licenses/lgpl21

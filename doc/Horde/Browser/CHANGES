@@ -1,6 +1,9 @@
------------
-v2.0.16-git
------------
+------------
+v3.0.0alpha1
+------------
+
+[mjr] Fix uploads being disabled when post_max_upload is set to 0 in php.ini.
+
 
 
 -------
