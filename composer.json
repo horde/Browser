@@ -26,9 +26,9 @@
     ],
     "require": {
         "php": "^7",
-        "horde/Exception": "^3 || dev-FRAMEWORK_6_0",
-        "horde/Translation": "^3 || dev-FRAMEWORK_6_0",
-        "horde/Util": "^3 || dev-FRAMEWORK_6_0"
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
+        "horde/translation": "^3 || dev-FRAMEWORK_6_0",
+        "horde/util": "^3 || dev-FRAMEWORK_6_0"
     },
     "suggest": {},
     "autoload": {
