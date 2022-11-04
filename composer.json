@@ -1,5 +1,4 @@
 {
-    "minimum-stability": "dev",
     "name": "horde/browser",
     "description": "Browser detection library",
     "type": "library",
@@ -17,23 +16,30 @@
             "role": "developer"
         }
     ],
-    "time": "2021-03-13",
+    "time": "2022-11-04",
     "repositories": [
         {
             "type": "composer",
-            "url": "https://horde-satis.maintaina.com/"
+            "url": "https://horde-satis.maintaina.com"
         }
     ],
     "require": {
         "php": "^7.4 || ^8",
-        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
-        "horde/translation": "^3 || dev-FRAMEWORK_6_0",
-        "horde/util": "^3 || dev-FRAMEWORK_6_0"
+        "horde/Exception": "^3 || dev-FRAMEWORK_6_0",
+        "horde/Translation": "^3 || dev-FRAMEWORK_6_0",
+        "horde/Util": "^3 || dev-FRAMEWORK_6_0"
     },
+    "require-dev": {},
     "suggest": {},
     "autoload": {
         "psr-0": {
             "Horde_Browser": "lib/"
+        }
+    },
+    "autoload-dev": [],
+    "config": {
+        "allow-plugins": {
+            "horde/horde-installer-plugin": true
         }
     }
 }
