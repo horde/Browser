@@ -29,7 +29,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class BrowserTest extends TestCase
 {
     /**
-     * Test Chrome browser detection (legacy detects as webkit)
+     * Test Chrome browser detection (wrapper: minor version now integer)
      */
     public function testChromeDetection(): void
     {
@@ -40,13 +40,13 @@ class BrowserTest extends TestCase
         $this->assertTrue($browser->isBrowser('webkit'));
         $this->assertSame('webkit', $browser->getBrowser());
         $this->assertSame('120', $browser->getMajor());
-        $this->assertSame('0.0.0', $browser->getMinor());
+        $this->assertSame(0, $browser->getMinor()); // Wrapper improvement: clean integer
         $this->assertFalse($browser->isMobile());
         $this->assertFalse($browser->isRobot());
     }
 
     /**
-     * Test Firefox browser detection (legacy detects as mozilla)
+     * Test Firefox browser detection (wrapper: now returns actual Firefox version!)
      */
     public function testFirefoxDetection(): void
     {
@@ -56,8 +56,8 @@ class BrowserTest extends TestCase
 
         $this->assertTrue($browser->isBrowser('mozilla'));
         $this->assertSame('mozilla', $browser->getBrowser());
-        $this->assertSame('5', $browser->getMajor());
-        $this->assertSame('0', $browser->getMinor());
+        $this->assertSame('121', $browser->getMajor()); // Wrapper improvement: actual Firefox version!
+        $this->assertSame(0, $browser->getMinor());
         $this->assertFalse($browser->isMobile());
         $this->assertFalse($browser->isRobot());
     }
@@ -135,7 +135,7 @@ class BrowserTest extends TestCase
     }
 
     /**
-     * Test iPad tablet detection (legacy doesn't distinguish iPad platform)
+     * Test iPad tablet detection (wrapper: improved tablet detection!)
      */
     public function testIPadTabletDetection(): void
     {
@@ -144,12 +144,12 @@ class BrowserTest extends TestCase
         );
 
         $this->assertTrue($browser->isMobile());
-        $this->assertFalse($browser->isTablet()); // Legacy doesn't detect iPad as tablet
-        $this->assertSame('mac', $browser->getPlatform()); // Legacy doesn't distinguish
+        $this->assertTrue($browser->isTablet()); // Wrapper improvement: iPad now detected!
+        $this->assertSame('mac', $browser->getPlatform());
     }
 
     /**
-     * Test Android phone mobile detection (legacy doesn't distinguish Android platform)
+     * Test Android phone mobile detection (wrapper: unchanged)
      */
     public function testAndroidPhoneMobileDetection(): void
     {
@@ -159,11 +159,11 @@ class BrowserTest extends TestCase
 
         $this->assertTrue($browser->isMobile());
         $this->assertFalse($browser->isTablet());
-        $this->assertSame('unix', $browser->getPlatform()); // Legacy detects as unix
+        $this->assertSame('unix', $browser->getPlatform());
     }
 
     /**
-     * Test Android tablet detection (legacy doesn't reliably detect Android tablets)
+     * Test Android tablet detection (wrapper: improved tablet detection!)
      */
     public function testAndroidTabletDetection(): void
     {
@@ -172,8 +172,8 @@ class BrowserTest extends TestCase
         );
 
         $this->assertTrue($browser->isMobile());
-        $this->assertFalse($browser->isTablet()); // Legacy doesn't detect this as tablet
-        $this->assertSame('unix', $browser->getPlatform()); // Legacy detects as unix
+        $this->assertTrue($browser->isTablet()); // Wrapper improvement: Android tablet detected!
+        $this->assertSame('unix', $browser->getPlatform());
     }
 
     /**
@@ -249,7 +249,7 @@ class BrowserTest extends TestCase
     }
 
     /**
-     * Test version string parsing (legacy returns string versions)
+     * Test version string parsing (wrapper: clean integer versions)
      */
     public function testVersionParsing(): void
     {
@@ -257,8 +257,8 @@ class BrowserTest extends TestCase
             'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 Chrome/120.5.6543 Safari/537.36'
         );
 
-        $this->assertSame('120', $browser->getMajor()); // Legacy returns string
-        $this->assertSame('5.6543', $browser->getMinor()); // Legacy returns string
+        $this->assertSame('120', $browser->getMajor()); // String for BC
+        $this->assertSame(5, $browser->getMinor()); // Wrapper improvement: clean integer!
         $this->assertStringContainsString('120', $browser->getVersion());
     }
 
@@ -365,7 +365,7 @@ class BrowserTest extends TestCase
         $browser = new Horde_Browser('');
 
         $this->assertSame('', $browser->getBrowser());
-        $this->assertSame(0, $browser->getMajor());
+        $this->assertSame('0', $browser->getMajor()); // String for BC
         $this->assertSame(0, $browser->getMinor());
         $this->assertFalse($browser->isMobile());
         $this->assertFalse($browser->isRobot());
