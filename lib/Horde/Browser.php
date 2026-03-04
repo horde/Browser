@@ -356,25 +356,28 @@ class Horde_Browser
     /**
      * Check if device is mobile (improved detection).
      *
-     * Returns true if device is a mobile phone.
+     * Returns true if device is a mobile phone or tablet.
      *
      * **Delegates to modern implementation** with improved detection.
      *
      * **Returns true for:**
      * - iPhone
+     * - iPad (BC: tablets are considered "mobile" in legacy API)
      * - Android phones
+     * - Android tablets (BC: tablets are considered "mobile" in legacy API)
      * - Windows Phone
      *
      * **Returns false for:**
-     * - Tablets (use isTablet() instead)
      * - Desktop computers
+     *
+     * **Note:** Legacy API did not distinguish tablets from mobile phones.
+     * Both return true for isMobile(). Use isTablet() to distinguish.
      *
      * **Can be overridden** with setMobile() for custom detection.
      *
-     * @return bool True if mobile phone
-     * @see isTablet() To check for tablets
+     * @return bool True if mobile phone or tablet
+     * @see isTablet() To check specifically for tablets
      * @see setMobile() To manually override detection
-     * @see \Horde\Browser\Browser::mobile() For same behavior
      */
     public function isMobile(): bool
     {
@@ -382,7 +385,8 @@ class Horde_Browser
             return $this->_manualMobile;
         }
 
-        return $this->_modern->isMobile;
+        // Legacy BC: tablets are considered "mobile"
+        return $this->_modern->isMobile || $this->_modern->isTablet;
     }
 
     /**
