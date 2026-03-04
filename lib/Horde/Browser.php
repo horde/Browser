@@ -21,12 +21,109 @@ use Horde\Browser\Platform;
  * This class provides full backward compatibility with legacy code while
  * delegating all browser detection to the modern implementation.
  *
+ * ## Legacy Value Mapping
+ *
+ * This wrapper **maps modern values back to legacy format** to maintain
+ * backward compatibility:
+ *
+ * ### Browser Names (Legacy Format)
+ *
+ * **Returns legacy generic names:**
+ * ```php
+ * $browser->getBrowser() // Returns legacy values:
+ * 'webkit'  // For Chrome, Safari, Edge (not distinguished)
+ * 'mozilla' // For Firefox (not 'firefox')
+ * 'msie'    // For Internet Explorer
+ * 'opera'   // For old Opera (pre-Chromium)
+ * ```
+ *
+ * **Modern implementation detects:**
+ * - Chrome → Mapped to 'webkit'
+ * - Safari → Mapped to 'webkit'
+ * - Edge → Mapped to 'webkit'
+ * - Firefox → Mapped to 'mozilla'
+ *
+ * ### Platform Names (Legacy Format)
+ *
+ * **Returns legacy platform names:**
+ * ```php
+ * $browser->getPlatform() // Returns legacy values:
+ * 'mac'  // For macOS, iPhone, iPad (not distinguished!)
+ * 'unix' // For Linux, Android (not distinguished!)
+ * 'win'  // For Windows
+ * ```
+ *
+ * **Modern implementation detects:**
+ * - iPhone → Mapped to 'mac'
+ * - iPad → Mapped to 'mac'
+ * - Android → Mapped to 'unix'
+ * - macOS → Mapped to 'mac'
+ * - Linux → Mapped to 'unix'
+ * - Windows → Mapped to 'win'
+ *
+ * ### Version Numbers (Legacy Format)
+ *
+ * **Returns strings for backward compatibility:**
+ * ```php
+ * $browser->getMajor() // '120' (string, not int)
+ * $browser->getMinor() // 5 (int - improved from legacy!)
+ * ```
+ *
+ * **Legacy behavior maintained:**
+ * - Major version as string (BC requirement)
+ * - Minor version as integer (improvement!)
+ *
+ * ### Improvements Provided by Wrapper
+ *
+ * Even with legacy API, you get improvements:
+ *
+ * **1. Correct Firefox Version:**
+ * ```php
+ * // Firefox 121 user agent
+ * $browser->getMajor() // '121' (actual Firefox version!)
+ * // Legacy returned '5' (Mozilla version)
+ * ```
+ *
+ * **2. Working Tablet Detection:**
+ * ```php
+ * $browser->isTablet() // true for iPad (fixed!)
+ * // Legacy returned false (broken!)
+ * ```
+ *
+ * **3. Clean Minor Versions:**
+ * ```php
+ * $browser->getMinor() // 5 (clean integer)
+ * // Legacy returned '5.6543' (string with extra decimals)
+ * ```
+ *
+ * **4. Better Robot Detection:**
+ * - Modern patterns for new bots (DuckDuckBot, AppleBot, etc.)
+ *
+ * ## Migration to Modern API
+ *
+ * To use the modern API with native values:
+ *
+ * ```php
+ * // Old (legacy wrapper)
+ * $browser = new Horde_Browser();
+ * $browser->getBrowser();    // 'webkit' (generic)
+ * $browser->getMajor();      // '120' (string)
+ * $browser->getPlatform();   // 'mac' (generic)
+ *
+ * // New (modern implementation)
+ * $browser = new \Horde\Browser\Browser();
+ * $browser->getBrowser();       // BrowserFamily::Chrome (specific!)
+ * $browser->getMajorVersion();  // 120 (int for comparison!)
+ * $browser->getPlatform();      // Platform::IPhone (specific!)
+ * ```
+ *
  * @author    Chuck Hagenbuch <chuck@horde.org>
  * @author    Jon Parise <jon@horde.org>
  * @category  Horde
  * @copyright 1999-2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL-2.1
  * @package   Browser
+ * @see \Horde\Browser\Browser For modern implementation with native values
  */
 class Horde_Browser
 {
@@ -87,9 +184,29 @@ class Horde_Browser
     }
 
     /**
-     * Get browser name (legacy string format).
+     * Get browser name (legacy format).
      *
-     * @return string Browser name
+     * Returns legacy browser name for backward compatibility.
+     *
+     * **Legacy values returned:**
+     * - `'webkit'` - For Chrome, Safari, Edge (not distinguished)
+     * - `'mozilla'` - For Firefox
+     * - `'msie'` - For Internet Explorer
+     * - `'opera'` - For old Opera
+     * - `''` - For unknown browsers
+     *
+     * **Modern implementation detects but maps to legacy:**
+     * - Chrome → 'webkit' (mapped)
+     * - Safari → 'webkit' (mapped)
+     * - Edge → 'webkit' (mapped)
+     * - Firefox → 'mozilla' (mapped)
+     *
+     * **For native values**, use `\Horde\Browser\Browser::getBrowser()`
+     * which returns distinct `BrowserFamily` enum values.
+     *
+     * @return string Legacy browser name
+     * @see \Horde\Browser\Browser::getBrowser() For native enum value
+     * @see \Horde\Browser\Browser::getBrowserName() For native string value
      */
     public function getBrowser(): string
     {
@@ -132,9 +249,21 @@ class Horde_Browser
     }
 
     /**
-     * Get major version (legacy string format for BC).
+     * Get major version (legacy string format).
+     *
+     * Returns major version as string for backward compatibility.
+     *
+     * **Returns:** String like `'120'`, `'121'`, etc.
+     *
+     * **Improvement over pure legacy:**
+     * - Firefox now returns actual version ('121') not Mozilla version ('5')
+     * - Still returns string for BC, but correct version number
+     *
+     * **For native integer value**, use `\Horde\Browser\Browser::getMajorVersion()`
+     * which returns int for proper numeric comparison.
      *
      * @return string Major version as string
+     * @see \Horde\Browser\Browser::getMajorVersion() For native integer value
      */
     public function getMajor(): string
     {
@@ -142,9 +271,20 @@ class Horde_Browser
     }
 
     /**
-     * Get minor version (legacy string format for BC).
+     * Get minor version (improved format).
      *
-     * @return string|int Minor version (may be string or int for BC)
+     * Returns minor version as integer (improvement over legacy).
+     *
+     * **Returns:** Integer like `5`, `0`, etc.
+     *
+     * **Improvement over pure legacy:**
+     * - Returns clean integer (5) not string ('5.6543')
+     * - Consistent type (always int)
+     *
+     * **Same as modern API**: `\Horde\Browser\Browser::getMinorVersion()`
+     *
+     * @return string|int Minor version (usually int, for BC may be mixed)
+     * @see \Horde\Browser\Browser::getMinorVersion() For guaranteed integer
      */
     public function getMinor()
     {
@@ -173,9 +313,30 @@ class Horde_Browser
     }
 
     /**
-     * Get platform (legacy string format).
+     * Get platform (legacy format).
      *
-     * @return string Platform name
+     * Returns legacy platform name for backward compatibility.
+     *
+     * **Legacy values returned:**
+     * - `'mac'` - For macOS, iPhone, iPad (not distinguished!)
+     * - `'unix'` - For Linux, Android (not distinguished!)
+     * - `'win'` - For Windows
+     * - `''` - For unknown platforms
+     *
+     * **Modern implementation detects but maps to legacy:**
+     * - iPhone → 'mac' (mapped, not distinguished)
+     * - iPad → 'mac' (mapped, not distinguished)
+     * - Android → 'unix' (mapped, not distinguished)
+     * - macOS → 'mac'
+     * - Linux → 'unix'
+     * - Windows → 'win'
+     *
+     * **For native values**, use `\Horde\Browser\Browser::getPlatform()`
+     * which returns distinct `Platform` enum values like `Platform::IPhone`.
+     *
+     * @return string Legacy platform name
+     * @see \Horde\Browser\Browser::getPlatform() For native enum value
+     * @see \Horde\Browser\Browser::getPlatformName() For native string value
      */
     public function getPlatform(): string
     {
@@ -193,9 +354,27 @@ class Horde_Browser
     }
 
     /**
-     * Check if device is mobile.
+     * Check if device is mobile (improved detection).
      *
-     * @return bool True if mobile
+     * Returns true if device is a mobile phone.
+     *
+     * **Delegates to modern implementation** with improved detection.
+     *
+     * **Returns true for:**
+     * - iPhone
+     * - Android phones
+     * - Windows Phone
+     *
+     * **Returns false for:**
+     * - Tablets (use isTablet() instead)
+     * - Desktop computers
+     *
+     * **Can be overridden** with setMobile() for custom detection.
+     *
+     * @return bool True if mobile phone
+     * @see isTablet() To check for tablets
+     * @see setMobile() To manually override detection
+     * @see \Horde\Browser\Browser::mobile() For same behavior
      */
     public function isMobile(): bool
     {
@@ -209,6 +388,8 @@ class Horde_Browser
     /**
      * Manually set mobile flag.
      *
+     * Override automatic mobile detection with custom value.
+     *
      * @param bool $mobile Mobile flag
      */
     public function setMobile($mobile): void
@@ -217,9 +398,28 @@ class Horde_Browser
     }
 
     /**
-     * Check if device is tablet.
+     * Check if device is tablet (improved detection!).
+     *
+     * Returns true if device is a tablet.
+     *
+     * **Improvement over pure legacy:**
+     * - iPad now correctly detected as tablet (was broken!)
+     * - Android tablets now correctly detected (was broken!)
+     *
+     * **Returns true for:**
+     * - iPad
+     * - Android tablets
+     *
+     * **Returns false for:**
+     * - Mobile phones
+     * - Desktop computers
+     *
+     * **Can be overridden** with setTablet() for custom detection.
      *
      * @return bool True if tablet
+     * @see isMobile() To check for mobile phones
+     * @see setTablet() To manually override detection
+     * @see \Horde\Browser\Browser::tablet() For same behavior
      */
     public function isTablet(): bool
     {
@@ -232,6 +432,8 @@ class Horde_Browser
 
     /**
      * Manually set tablet flag.
+     *
+     * Override automatic tablet detection with custom value.
      *
      * @param bool $tablet Tablet flag
      */
