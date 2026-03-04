@@ -19,8 +19,120 @@ namespace Horde\Browser;
  * Provides improved browser, platform, and device type detection
  * with modern user agent parsing.
  *
+ * ## Native vs Legacy Values
+ *
+ * This modern implementation returns **native/accurate values**,
+ * which differ from the legacy `Horde_Browser` class:
+ *
+ * ### Browser Detection (Native)
+ *
+ * **Modern API returns actual browsers:**
+ * ```php
+ * $browser->getBrowser()     // BrowserFamily::Chrome (enum)
+ * $browser->getBrowserName() // 'chrome' (string)
+ * ```
+ *
+ * **Legacy API mapped everything to generic names:**
+ * ```php
+ * // Legacy Horde_Browser returned:
+ * 'webkit'  // For Chrome, Safari, Edge (not distinguished!)
+ * 'mozilla' // For Firefox (not 'firefox')
+ * ```
+ *
+ * ### Platform Detection (Native)
+ *
+ * **Modern API distinguishes mobile platforms:**
+ * ```php
+ * $browser->getPlatform()     // Platform::IPhone (enum)
+ * $browser->getPlatformName() // 'iphone' (string)
+ * ```
+ *
+ * **Legacy API didn't distinguish:**
+ * ```php
+ * // Legacy Horde_Browser returned:
+ * 'mac'  // For iPhone, iPad, macOS (not distinguished!)
+ * 'unix' // For Android, Linux (not distinguished!)
+ * 'win'  // For Windows (not 'windows')
+ * ```
+ *
+ * ### Version Numbers (Native)
+ *
+ * **Modern API returns integers for comparison:**
+ * ```php
+ * $browser->getMajorVersion() // 120 (int)
+ * $browser->getMinorVersion() // 5 (int)
+ * if ($browser->getMajorVersion() >= 120) { ... } // Works!
+ * ```
+ *
+ * **Legacy API returned strings:**
+ * ```php
+ * // Legacy Horde_Browser returned:
+ * '120'      // Major as string (can't compare numerically)
+ * '5.6543'   // Minor as string with extra decimals
+ * ```
+ *
+ * ### Tablet Detection (Native, Fixed!)
+ *
+ * **Modern API properly detects tablets:**
+ * ```php
+ * $browser->tablet() // true for iPad, Android tablets
+ * ```
+ *
+ * **Legacy API was broken:**
+ * ```php
+ * // Legacy Horde_Browser returned:
+ * false // For iPad (broken detection!)
+ * false // For Android tablets (broken detection!)
+ * ```
+ *
+ * ## Backward Compatibility
+ *
+ * For code using the legacy `Horde_Browser` class, use the wrapper
+ * in `lib/Horde/Browser.php` which:
+ * - Delegates to this modern implementation
+ * - Maps values back to legacy format
+ * - Maintains full API compatibility
+ * - Still benefits from improved detection underneath
+ *
+ * ## Usage Examples
+ *
+ * ```php
+ * // Modern API (recommended)
+ * $browser = new \Horde\Browser\Browser();
+ *
+ * // Browser detection with enums
+ * if ($browser->getBrowser() === BrowserFamily::Chrome) {
+ *     // Chrome-specific code
+ * }
+ *
+ * // Platform detection with enums
+ * if ($browser->getPlatform() === Platform::IPhone) {
+ *     // iPhone-specific code
+ * }
+ *
+ * // Version comparison (works correctly!)
+ * if ($browser->getMajorVersion() >= 120) {
+ *     // Modern browser features
+ * }
+ *
+ * // Device type detection
+ * if ($browser->mobile()) {
+ *     // Mobile phone UI
+ * } elseif ($browser->tablet()) {
+ *     // Tablet UI (now works on iPad!)
+ * } else {
+ *     // Desktop UI
+ * }
+ *
+ * // String values for convenience
+ * $name = $browser->getBrowserName();    // 'chrome'
+ * $platform = $browser->getPlatformName(); // 'iphone'
+ * ```
+ *
  * @category Horde
  * @package  Browser
+ * @see BrowserFamily For browser types
+ * @see Platform For platform types with helper methods
  */
 readonly class Browser
 {
@@ -296,7 +408,25 @@ readonly class Browser
     }
 
     /**
-     * Get browser family.
+     * Get browser family (native).
+     *
+     * Returns the actual detected browser family as an enum.
+     *
+     * **Native values** (modern API):
+     * - Chrome → BrowserFamily::Chrome
+     * - Safari → BrowserFamily::Safari
+     * - Edge → BrowserFamily::Edge
+     * - Firefox → BrowserFamily::Firefox
+     * - Opera → BrowserFamily::Opera
+     *
+     * **Contrast with legacy Horde_Browser:**
+     * - Legacy returns 'webkit' for Chrome/Safari/Edge
+     * - Legacy returns 'mozilla' for Firefox
+     * - This method returns the actual browser family
+     *
+     * @return BrowserFamily Browser family enum
+     * @see getBrowserName() For string representation
+     * @see BrowserFamily For all possible values
      */
     public function getBrowser(): BrowserFamily
     {
@@ -304,7 +434,23 @@ readonly class Browser
     }
 
     /**
-     * Get browser family as string (for BC compatibility).
+     * Get browser family as string (convenience method).
+     *
+     * Returns the enum value as a string for convenience.
+     * This is NOT a legacy-compatible value.
+     *
+     * **Returns native string values**:
+     * - 'chrome' (not 'webkit')
+     * - 'safari' (not 'webkit')
+     * - 'edge' (not 'webkit')
+     * - 'firefox' (not 'mozilla')
+     * - 'opera', 'ie', 'unknown'
+     *
+     * **For legacy compatibility**, use the wrapper class `Horde_Browser`
+     * which maps these to legacy values like 'webkit' and 'mozilla'.
+     *
+     * @return string Browser family name
+     * @see getBrowser() For enum representation
      */
     public function getBrowserName(): string
     {
@@ -323,7 +469,23 @@ readonly class Browser
     }
 
     /**
-     * Get major version number.
+     * Get major version number (native).
+     *
+     * Returns the major version as an integer for proper version comparison.
+     *
+     * **Native behavior** (modern API):
+     * - Returns integer: 120
+     * - Chrome 120.0.0.0 → 120 (int)
+     * - Firefox 121.0 → 121 (int)
+     *
+     * **Contrast with legacy Horde_Browser:**
+     * - Legacy returns string: '120'
+     * - Cannot do proper numeric comparisons
+     * - This method returns actual integer
+     *
+     * @return int Major version number
+     * @see getMinorVersion() For minor version
+     * @see getVersion() For full version string
      */
     public function getMajorVersion(): int
     {
@@ -331,7 +493,23 @@ readonly class Browser
     }
 
     /**
-     * Get minor version number.
+     * Get minor version number (native).
+     *
+     * Returns the minor version as an integer for proper version comparison.
+     *
+     * **Native behavior** (modern API):
+     * - Returns integer: 5
+     * - Chrome 120.5 → 5 (int)
+     * - Clean integer value
+     *
+     * **Contrast with legacy Horde_Browser:**
+     * - Legacy sometimes returns strings like '5.6543'
+     * - Mixed types (sometimes int, sometimes string)
+     * - This method returns clean integer
+     *
+     * @return int Minor version number
+     * @see getMajorVersion() For major version
+     * @see getVersion() For full version string
      */
     public function getMinorVersion(): int
     {
@@ -347,7 +525,27 @@ readonly class Browser
     }
 
     /**
-     * Get platform.
+     * Get platform (native).
+     *
+     * Returns the actual detected platform as an enum.
+     *
+     * **Native values** (modern API):
+     * - iPhone → Platform::IPhone
+     * - iPad → Platform::IPad
+     * - Android → Platform::Android
+     * - Windows → Platform::Windows
+     * - macOS → Platform::MacOS
+     * - Linux → Platform::Linux
+     *
+     * **Contrast with legacy Horde_Browser:**
+     * - Legacy returns 'mac' for iPhone/iPad (not distinguished!)
+     * - Legacy returns 'unix' for Android (not distinguished!)
+     * - Legacy returns 'win' instead of 'windows'
+     * - This method returns the actual platform
+     *
+     * @return Platform Platform enum
+     * @see getPlatformName() For string representation
+     * @see Platform For all possible values and helper methods
      */
     public function getPlatform(): Platform
     {
@@ -355,7 +553,25 @@ readonly class Browser
     }
 
     /**
-     * Get platform as string (for BC compatibility).
+     * Get platform as string (convenience method).
+     *
+     * Returns the enum value as a string for convenience.
+     * This is NOT a legacy-compatible value.
+     *
+     * **Returns native string values**:
+     * - 'iphone' (not 'mac')
+     * - 'ipad' (not 'mac')
+     * - 'android' (not 'unix')
+     * - 'windows' (not 'win')
+     * - 'macos' (not 'mac')
+     * - 'linux' (not 'unix')
+     * - 'chromeos', 'unknown'
+     *
+     * **For legacy compatibility**, use the wrapper class `Horde_Browser`
+     * which maps these to legacy values like 'mac' and 'unix'.
+     *
+     * @return string Platform name
+     * @see getPlatform() For enum representation
      */
     public function getPlatformName(): string
     {
@@ -363,7 +579,24 @@ readonly class Browser
     }
 
     /**
-     * Check if device is mobile.
+     * Check if device is mobile (native).
+     *
+     * Returns true if device is a mobile phone.
+     *
+     * **Native behavior** (modern API):
+     * - iPhone → true
+     * - Android phone → true
+     * - iPad → false (use tablet() instead)
+     * - Android tablet → false (use tablet() instead)
+     * - Desktop → false
+     *
+     * **Contrast with legacy Horde_Browser:**
+     * - Legacy sometimes returns true for tablets
+     * - This method distinguishes mobile from tablet
+     *
+     * @return bool True if mobile phone
+     * @see tablet() To check if device is a tablet
+     * @see Platform::isMobile() For platform-based check
      */
     public function mobile(): bool
     {
@@ -371,7 +604,28 @@ readonly class Browser
     }
 
     /**
-     * Check if device is tablet.
+     * Check if device is tablet (native, improved detection).
+     *
+     * Returns true if device is a tablet.
+     *
+     * **Native behavior** (modern API):
+     * - iPad → true (detected correctly!)
+     * - Android tablets → true (detected correctly!)
+     * - Mobile phones → false
+     * - Desktop → false
+     *
+     * **Contrast with legacy Horde_Browser:**
+     * - Legacy returns false for iPad (broken!)
+     * - Legacy returns false for Android tablets (broken!)
+     * - This method properly detects tablets
+     *
+     * **Detection logic:**
+     * - iPad: Detected from user agent "iPad"
+     * - Android tablets: No "Mobile" in UA but has "Android"
+     *
+     * @return bool True if tablet
+     * @see mobile() To check if device is a mobile phone
+     * @see Platform::isTablet() For platform-based check
      */
     public function tablet(): bool
     {
