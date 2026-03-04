@@ -27,3 +27,12 @@ run-tests.log
 /test/*/*/*/*.log
 /test/*/*/*/*.out
 
+# Composer
+/vendor/
+/composer.lock
+
+# PHPUnit
+/.phpunit.cache/
+
+# Test scripts
+/test_legacy_behavior.php
