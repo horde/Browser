@@ -25,7 +25,7 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8",
+        "php": "^8.2",
         "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/translation": "^3 || dev-FRAMEWORK_6_0",
         "horde/util": "^3 || dev-FRAMEWORK_6_0"
@@ -35,6 +35,9 @@
     },
     "suggest": {},
     "autoload": {
+        "psr-4": {
+            "Horde\\Browser\\": "src/"
+        },
         "psr-0": {
             "Horde_Browser": "lib/"
         }
