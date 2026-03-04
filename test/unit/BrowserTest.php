@@ -368,4 +368,128 @@ class BrowserTest extends TestCase
         $this->assertSame('Firefox', BrowserFamily::Firefox->displayName());
         $this->assertSame('Microsoft Edge', BrowserFamily::Edge->displayName());
     }
+
+    /**
+     * Test native browser values (not legacy 'webkit')
+     */
+    public function testNativeBrowserValues(): void
+    {
+        $chrome = new Browser(
+            'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        );
+        $safari = new Browser(
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15'
+        );
+        $edge = new Browser(
+            'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0'
+        );
+
+        // Native: Each browser is distinct
+        $this->assertSame(BrowserFamily::Chrome, $chrome->getBrowser());
+        $this->assertSame(BrowserFamily::Safari, $safari->getBrowser());
+        $this->assertSame(BrowserFamily::Edge, $edge->getBrowser());
+
+        // Native string values: Specific browser names
+        $this->assertSame('chrome', $chrome->getBrowserName());
+        $this->assertSame('safari', $safari->getBrowserName());
+        $this->assertSame('edge', $edge->getBrowserName());
+
+        // All different! (Legacy would return 'webkit' for all three)
+        $this->assertNotSame($chrome->getBrowser(), $safari->getBrowser());
+        $this->assertNotSame($chrome->getBrowser(), $edge->getBrowser());
+        $this->assertNotSame($safari->getBrowser(), $edge->getBrowser());
+    }
+
+    /**
+     * Test native platform values (not legacy 'mac' for iPhone)
+     */
+    public function testNativePlatformValues(): void
+    {
+        $iphone = new Browser(
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15'
+        );
+        $ipad = new Browser(
+            'Mozilla/5.0 (iPad; CPU OS 17_2 like Mac OS X) AppleWebKit/605.1.15'
+        );
+        $mac = new Browser(
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2) AppleWebKit/605.1.15'
+        );
+
+        // Native: Each platform is distinct
+        $this->assertSame(Platform::IPhone, $iphone->getPlatform());
+        $this->assertSame(Platform::IPad, $ipad->getPlatform());
+        $this->assertSame(Platform::MacOS, $mac->getPlatform());
+
+        // Native string values: Specific platform names
+        $this->assertSame('iphone', $iphone->getPlatformName());
+        $this->assertSame('ipad', $ipad->getPlatformName());
+        $this->assertSame('macos', $mac->getPlatformName());
+
+        // All different! (Legacy would return 'mac' for all three)
+        $this->assertNotSame($iphone->getPlatform(), $ipad->getPlatform());
+        $this->assertNotSame($iphone->getPlatform(), $mac->getPlatform());
+        $this->assertNotSame($ipad->getPlatform(), $mac->getPlatform());
+    }
+
+    /**
+     * Test native integer version numbers (not legacy strings)
+     */
+    public function testNativeIntegerVersions(): void
+    {
+        $browser = new Browser(
+            'Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 Chrome/120.5 Safari/537.36'
+        );
+
+        // Native: Returns integers for proper comparison
+        $major = $browser->getMajorVersion();
+        $minor = $browser->getMinorVersion();
+
+        $this->assertIsInt($major);
+        $this->assertIsInt($minor);
+        $this->assertSame(120, $major);
+        $this->assertSame(5, $minor);
+
+        // Can do proper numeric comparisons!
+        $this->assertTrue($major >= 100);
+        $this->assertTrue($major < 200);
+        $this->assertTrue($minor >= 0);
+
+        // Works with version checks
+        if ($major >= 120) {
+            $this->assertTrue(true, 'Modern browser version check works');
+        }
+    }
+
+    /**
+     * Test native tablet detection (legacy was broken)
+     */
+    public function testNativeTabletDetection(): void
+    {
+        $ipad = new Browser(
+            'Mozilla/5.0 (iPad; CPU OS 17_2 like Mac OS X) AppleWebKit/605.1.15'
+        );
+        $androidTablet = new Browser(
+            'Mozilla/5.0 (Linux; Android 13; SM-X906C) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36'
+        );
+        $iphone = new Browser(
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15'
+        );
+
+        // Native: iPad is correctly detected as tablet
+        $this->assertTrue($ipad->tablet(), 'iPad should be detected as tablet');
+        $this->assertFalse($ipad->mobile(), 'iPad is not a mobile phone');
+        $this->assertSame(Platform::IPad, $ipad->getPlatform());
+
+        // Native: Android tablet is correctly detected
+        $this->assertTrue($androidTablet->tablet(), 'Android tablet should be detected');
+        $this->assertTrue($androidTablet->mobile(), 'Android is considered mobile platform');
+        $this->assertSame(Platform::Android, $androidTablet->getPlatform());
+
+        // iPhone is mobile but not tablet
+        $this->assertTrue($iphone->mobile(), 'iPhone is mobile');
+        $this->assertFalse($iphone->tablet(), 'iPhone is not a tablet');
+
+        // Legacy would return false for tablet detection (broken detection)
+        // Modern properly detects tablets
+    }
 }
