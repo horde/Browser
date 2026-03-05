@@ -177,8 +177,9 @@ class Horde_Browser
      *
      * @param string|null $userAgent User agent string
      * @param string|null $accept    HTTP Accept header
+     * @return void
      */
-    public function match($userAgent = null, $accept = null): void
+    public function match($userAgent = null, $accept = null)
     {
         $this->_modern = new ModernBrowser($userAgent, $accept);
     }
@@ -242,8 +243,9 @@ class Horde_Browser
      * Manually set browser name.
      *
      * @param string $browser Browser name
+     * @return void
      */
-    public function setBrowser($browser): void
+    public function setBrowser($browser)
     {
         $this->_manualBrowser = $browser;
     }
@@ -395,8 +397,9 @@ class Horde_Browser
      * Override automatic mobile detection with custom value.
      *
      * @param bool $mobile Mobile flag
+     * @return void
      */
-    public function setMobile($mobile): void
+    public function setMobile($mobile)
     {
         $this->_manualMobile = (bool)$mobile;
     }
@@ -440,8 +443,9 @@ class Horde_Browser
      * Override automatic tablet detection with custom value.
      *
      * @param bool $tablet Tablet flag
+     * @return void
      */
-    public function setTablet($tablet): void
+    public function setTablet($tablet)
     {
         $this->_manualTablet = (bool)$tablet;
     }
@@ -501,8 +505,9 @@ class Horde_Browser
      *
      * @param string $feature Feature name
      * @param mixed $value Feature value
+     * @return void
      */
-    public function setFeature($feature, $value = true): void
+    public function setFeature($feature, $value = true)
     {
         $this->_customFeatures[$feature] = $value;
     }
@@ -542,8 +547,9 @@ class Horde_Browser
      *
      * @param string $quirk Quirk name
      * @param mixed $value Quirk value
+     * @return void
      */
-    public function setQuirk($quirk, $value = true): void
+    public function setQuirk($quirk, $value = true)
     {
         $this->_customQuirks[$quirk] = $value;
     }
@@ -642,13 +648,14 @@ class Horde_Browser
      * @param string|null $ctype Content type
      * @param bool $inline Display inline (true) or as attachment (false)
      * @param string|null $cLength Content length
+     * @return void
      */
     public function downloadHeaders(
         $filename,
         $ctype = null,
         $inline = false,
         $cLength = null
-    ): void {
+    ) {
         if ($ctype === null) {
             $ctype = 'application/octet-stream';
         }
