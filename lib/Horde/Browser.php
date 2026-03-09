@@ -719,11 +719,12 @@ class Horde_Browser
     /**
      * Send download headers.
      *
+     * Sends HTTP headers for file downloads with browser-specific handling.
+     *
      * @param string $filename Filename for download
-     * @param string|null $ctype Content type
+     * @param string|null $ctype Content type (default: application/octet-stream)
      * @param bool $inline Display inline (true) or as attachment (false)
      * @param string|null $cLength Content length
-     * @return void
      */
     public function downloadHeaders(
         $filename,
@@ -731,21 +732,68 @@ class Horde_Browser
         $inline = false,
         $cLength = null
     ) {
-        if ($ctype === null) {
-            $ctype = 'application/octet-stream';
+        // Sanitize filename for security
+        $filename = str_replace(["\r\n", "\r", "\n"], ' ', $filename);
+        $filename = preg_replace('/[\x00-\x1f]+/', '', $filename);
+
+        // Handle browser-specific quirks for spaces
+        if ($this->hasQuirk('no_filename_spaces')) {
+            $filename = strtr($filename, ' ', '_');
         }
 
-        header('Content-Type: ' . trim($ctype));
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
+        // IE-specific filename handling
+        if ($this->isBrowser('msie')) {
+            // Convert multiple periods (except last) to underscores
+            if (($pos = strrpos($filename, '.'))) {
+                $filename = strtr(substr($filename, 0, $pos), '.', '_')
+                          . substr($filename, $pos);
+            }
+            // Encode filename for IE
+            $filename = rawurlencode($filename);
+        }
 
-        if ($cLength !== null) {
+        // Content-Type header
+        if ($inline) {
+            if ($ctype !== null) {
+                header('Content-Type: ' . trim($ctype));
+            } elseif ($this->isBrowser('msie')) {
+                header('Content-Type: application/x-msdownload');
+            } else {
+                header('Content-Type: application/octet-stream');
+            }
+            header('Content-Disposition: inline; filename="' . $filename . '"');
+        } else {
+            if ($this->isBrowser('msie')) {
+                header('Content-Type: application/x-msdownload');
+            } elseif ($ctype !== null) {
+                header('Content-Type: ' . trim($ctype));
+            } else {
+                header('Content-Type: application/octet-stream');
+            }
+
+            // Handle quirk for broken disposition headers
+            if ($this->hasQuirk('break_disposition_header')) {
+                header('Content-Disposition: filename="' . $filename . '"');
+            } else {
+                header('Content-Disposition: attachment; filename="' . $filename . '"');
+            }
+        }
+
+        // Content-Length - only if not compressing output
+        if ($cLength !== null && !in_array('ob_gzhandler', ob_list_handlers())) {
             header('Content-Length: ' . $cLength);
         }
 
-        $disposition = $inline ? 'inline' : 'attachment';
-        header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
+        // Cache headers - special handling for IE over SSL
+        if ($this->hasQuirk('cache_ssl_downloads')) {
+            header('Pragma: cache');
+            header('Cache-Control: private, must-revalidate');
+        } else {
+            header('Pragma: public');
+            header('Cache-Control: public, must-revalidate');
+        }
+
+        header('Expires: 0');
     }
 
     /**
