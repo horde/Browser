@@ -383,9 +383,14 @@ class Browser
             'tables' => true,
             'css' => true,
             'dom' => true,
+            'iframes' => true,
+            'accesskey' => true,
             'ajax' => false,  // Set per browser
             'xmlhttpreq' => true,
             'rte' => false,  // Rich text editor - set per browser
+            'homepage' => false,  // Set per browser
+            'optgroup' => false,  // Set per browser
+            'cite' => false,  // Set per browser
         ];
 
         // Browser-specific feature detection
@@ -400,6 +405,8 @@ class Browser
                     $features['ajax'] = false;
                     $features['dataurl'] = false;
                     $features['rte'] = false;
+                    $features['accesskey'] = true;
+                    $features['homepage'] = true;
                 }
                 // IE 5 Windows
                 elseif ($major == 5) {
@@ -407,6 +414,8 @@ class Browser
                     $features['dom'] = true;
                     $features['ajax'] = false;
                     $features['rte'] = true;
+                    $features['accesskey'] = true;
+                    $features['homepage'] = true;
                     if ($minor == 5) {
                         // IE 5.5 specific
                     }
@@ -417,6 +426,8 @@ class Browser
                     $features['dom'] = true;
                     $features['ajax'] = false;
                     $features['rte'] = true;
+                    $features['accesskey'] = true;
+                    $features['homepage'] = true;
                     $features['optgroup'] = true;
                 }
                 // IE 7
@@ -425,6 +436,9 @@ class Browser
                     $features['ajax'] = true;  // AJAX added in IE7
                     $features['dom'] = true;
                     $features['rte'] = true;
+                    $features['accesskey'] = true;
+                    $features['homepage'] = true;
+                    $features['optgroup'] = true;
                     $features['dataurl'] = false;
                 }
                 // IE 8
@@ -433,6 +447,9 @@ class Browser
                     $features['ajax'] = true;
                     $features['dom'] = true;
                     $features['rte'] = true;
+                    $features['accesskey'] = true;
+                    $features['homepage'] = true;
+                    $features['optgroup'] = true;
                     $features['dataurl'] = 32768;  // 32KB limit
                 }
                 // IE 9+
@@ -441,6 +458,9 @@ class Browser
                     $features['ajax'] = true;
                     $features['dom'] = true;
                     $features['rte'] = true;
+                    $features['accesskey'] = true;
+                    $features['homepage'] = true;
+                    $features['optgroup'] = true;
                     $features['cite'] = true;
                     $features['dataurl'] = true;
                 }
@@ -453,6 +473,7 @@ class Browser
                     $features['ajax'] = false;
                     $features['dom'] = false;
                     $features['iframes'] = true;
+                    $features['accesskey'] = true;
                 }
                 // Opera 7
                 elseif ($major == 7) {
@@ -460,12 +481,15 @@ class Browser
                     $features['ajax'] = false;
                     $features['dom'] = true;
                     $features['iframes'] = true;
+                    $features['accesskey'] = true;
                 }
                 // Opera 9+
                 elseif ($major >= 9) {
                     $features['javascript'] = '1.5';
                     $features['ajax'] = true;  // AJAX added in Opera 9
                     $features['dom'] = true;
+                    $features['iframes'] = true;
+                    $features['accesskey'] = true;
                     $features['dataurl'] = 4100;  // 4KB limit
                 }
                 break;
@@ -473,13 +497,30 @@ class Browser
             case BrowserFamily::Firefox:
                 $features['ajax'] = true;
                 $features['rte'] = true;
+                $features['accesskey'] = true;
+                $features['cite'] = true;
+                $features['optgroup'] = true;
                 break;
 
             case BrowserFamily::Chrome:
+                $features['ajax'] = true;
+                $features['rte'] = true;
+                $features['accesskey'] = true;
+                break;
+
             case BrowserFamily::Safari:
+                $features['ajax'] = true;
+                $features['rte'] = true;
+                // Safari 1.3+ has accesskey
+                if ($major > 1 || ($major == 1 && $minor >= 3)) {
+                    $features['accesskey'] = true;
+                }
+                break;
+
             case BrowserFamily::Edge:
                 $features['ajax'] = true;
                 $features['rte'] = true;
+                $features['accesskey'] = true;
                 break;
         }
 
@@ -820,10 +861,38 @@ class Browser
     }
 
     /**
-     * Check if browser has a feature.
+     * Check if browser version is unsupported for modern features.
+     *
+     * Returns true if the browser is a mainstream browser in an ancient version
+     * that cannot support modern CSS3 (Grid, Flexbox, Variables) and ES6+ JavaScript
+     * required by Horde's responsive UI.
+     *
+     * Based on minimum requirements:
+     * - CSS Grid (2017)
+     * - CSS Variables (2016-2017)
+     * - ES6 Modules (2017)
+     * - Flexbox (2015)
+     *
+     * Minimum supported versions:
+     * - Chrome: 61+ (September 2017)
+     * - Firefox: 60+ (May 2018)
+     * - Safari: 11+ (September 2017)
+     * - Edge: 16+ (October 2017)
+     * - Opera: 48+ (September 2017)
+     * - IE: Not supported (any version)
+     *
+     * Note: Unknown or niche browsers (Lynx, custom UAs, bots) return false.
+     * Only mainstream browsers in ancient versions are flagged as unsupported.
+     *
+     * @return bool True if browser version is too old for modern features
      */
     public function hasFeature(string $feature): bool
     {
+        // Special feature: unsupported_browser_version
+        if ($feature === 'unsupported_browser_version') {
+            return $this->isUnsupportedBrowserVersion();
+        }
+
         return !empty($this->features[$feature]);
     }
 
@@ -957,5 +1026,53 @@ class Browser
         ];
 
         return in_array($mimetype, $viewable, true);
+    }
+
+    /**
+     * Check if browser version is too old for modern features.
+     *
+     * Checks if the browser is a mainstream browser in an ancient version
+     * that cannot support modern CSS3 and ES6+ JavaScript required by
+     * Horde's responsive UI.
+     *
+     * Minimum supported versions (September 2017 baseline):
+     * - Chrome: 61+
+     * - Firefox: 60+
+     * - Safari: 11+
+     * - Edge: 16+
+     * - Opera: 48+
+     * - IE: Not supported (any version)
+     *
+     * Unknown/niche browsers return false (not flagged as unsupported).
+     *
+     * @return bool True if browser version is unsupported
+     */
+    private function isUnsupportedBrowserVersion(): bool
+    {
+        $major = $this->majorVersion;
+
+        return match ($this->browser) {
+            // Internet Explorer - all versions unsupported
+            BrowserFamily::InternetExplorer => true,
+
+            // Edge Legacy (EdgeHTML) < 16 unsupported
+            // Edge Chromium 79+ is fine (same as Chrome)
+            BrowserFamily::Edge => $major < 16,
+
+            // Chrome < 61 unsupported (September 2017)
+            BrowserFamily::Chrome => $major < 61,
+
+            // Firefox < 60 unsupported (May 2018)
+            BrowserFamily::Firefox => $major < 60,
+
+            // Safari < 11 unsupported (September 2017)
+            BrowserFamily::Safari => $major < 11,
+
+            // Opera < 48 unsupported (September 2017)
+            BrowserFamily::Opera => $major < 48,
+
+            // Unknown browsers are NOT flagged as unsupported
+            default => false,
+        };
     }
 }

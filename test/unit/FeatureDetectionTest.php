@@ -54,6 +54,10 @@ class FeatureDetectionTest extends TestCase
         $this->assertTrue($browser->hasFeature('images'));
         $this->assertTrue($browser->hasFeature('tables'));
         $this->assertTrue($browser->hasFeature('css'));
+
+        // Commonly used features
+        $this->assertTrue($browser->hasFeature('iframes'));
+        $this->assertTrue($browser->hasFeature('accesskey'));
     }
 
     /**
