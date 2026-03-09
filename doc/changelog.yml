@@ -53,6 +53,21 @@
   notes: |+
     [mjr] Fix uploads being disabled when post_max_upload is set to 0 in php.ini.
     
+3.0.0-alpha9:
+  api: 3.0.0-alpha9
+  state:
+    release: alpha
+    api: alpha
+  date: 2026-03-09
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    fix: User issue with turba file upload
+    doc: Add a migration guide from 2.x to 3.0
+    test: Increase unit test coverage for quirks detection.
+    fix(browser): restore browser-specific handling in downloadHeaders()
+    fix(browser): restore wasFileUploaded() exception behavior for BC
 3.0.0-alpha8:
   api: 3.0.0-alpha8
   state:
