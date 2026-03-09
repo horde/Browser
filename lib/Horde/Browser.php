@@ -631,14 +631,89 @@ class Horde_Browser
     /**
      * Check if a file was uploaded.
      *
+     * Validates file upload and throws exception with detailed error messages
+     * for various upload failure conditions.
+     *
      * @param string $field Form field name
-     * @param string|null $name Expected filename (unused, for BC)
-     * @return bool True if file was uploaded
+     * @param string|null $name Expected filename for error messages (default: 'file')
+     *
+     * @return void
+     *
+     * @throws Horde_Browser_Exception If upload failed or file not uploaded
      */
-    public function wasFileUploaded($field, $name = null): bool
+    public function wasFileUploaded($field, $name = null): void
     {
-        return isset($_FILES[$field]) &&
-               $_FILES[$field]['error'] !== UPLOAD_ERR_NO_FILE;
+        if (is_null($name)) {
+            $name = 'file';
+        }
+
+        if (!self::allowFileUploads()) {
+            throw new Horde_Browser_Exception(
+                Horde_Browser_Translation::t("File uploads not supported.")
+            );
+        }
+
+        if (!isset($_FILES[$field])) {
+            throw new Horde_Browser_Exception(
+                Horde_Browser_Translation::t("No file uploaded"),
+                UPLOAD_ERR_NO_FILE
+            );
+        }
+
+        $error = $_FILES[$field]['error'];
+        if (is_array($error)) {
+            $error = reset($error);
+        }
+
+        $tmp_name = $_FILES[$field]['tmp_name'] ?? '';
+        if (is_array($tmp_name)) {
+            $tmp_name = reset($tmp_name);
+        }
+
+        switch ($error) {
+            case UPLOAD_ERR_NO_FILE:
+                throw new Horde_Browser_Exception(
+                    sprintf(Horde_Browser_Translation::t("There was a problem with the file upload: No %s was uploaded."), $name),
+                    UPLOAD_ERR_NO_FILE
+                );
+
+            case UPLOAD_ERR_OK:
+                if (is_uploaded_file($tmp_name) && !filesize($tmp_name)) {
+                    throw new Horde_Browser_Exception(
+                        Horde_Browser_Translation::t("The uploaded file appears to be empty. It may not exist on your computer."),
+                        UPLOAD_ERR_NO_FILE
+                    );
+                }
+                // SUCCESS
+                break;
+
+            case UPLOAD_ERR_INI_SIZE:
+            case UPLOAD_ERR_FORM_SIZE:
+                $uploadSize = self::allowFileUploads();
+                throw new Horde_Browser_Exception(
+                    sprintf(Horde_Browser_Translation::t("There was a problem with the file upload: The %s was larger than the maximum allowed size (%d bytes)."), $name, $uploadSize),
+                    $error
+                );
+
+            case UPLOAD_ERR_PARTIAL:
+                throw new Horde_Browser_Exception(
+                    sprintf(Horde_Browser_Translation::t("There was a problem with the file upload: The %s was only partially uploaded."), $name),
+                    $error
+                );
+
+            case UPLOAD_ERR_NO_TMP_DIR:
+                throw new Horde_Browser_Exception(
+                    Horde_Browser_Translation::t("There was a problem with the file upload: The temporary folder used to store the upload data is missing."),
+                    $error
+                );
+
+            case UPLOAD_ERR_CANT_WRITE:
+            case UPLOAD_ERR_EXTENSION:
+                throw new Horde_Browser_Exception(
+                    Horde_Browser_Translation::t("There was a problem with the file upload: Can't write the uploaded data to the server."),
+                    $error
+                );
+        }
     }
 
     /**
