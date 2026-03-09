@@ -134,7 +134,7 @@ namespace Horde\Browser;
  * @see BrowserFamily For browser types
  * @see Platform For platform types with helper methods
  */
-readonly class Browser
+class Browser
 {
     /**
      * Browser family.
@@ -177,6 +177,11 @@ readonly class Browser
     public string $userAgent;
 
     /**
+     * HTTP Accept header.
+     */
+    private string $accept;
+
+    /**
      * Features supported by browser.
      *
      * @var array<string, mixed>
@@ -199,6 +204,7 @@ readonly class Browser
     public function __construct(?string $userAgent = null, ?string $accept = null)
     {
         $this->userAgent = $userAgent ?? $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $this->accept = strtolower($accept ?? $_SERVER['HTTP_ACCEPT'] ?? '');
         $lowerAgent = strtolower($this->userAgent);
 
         // Detect robot first
@@ -367,19 +373,140 @@ readonly class Browser
      */
     private function detectFeatures(?string $accept): array
     {
+        // Default features for modern browsers
         $features = [
-            'javascript' => true,  // Modern browsers all support JS
-            'ajax' => true,        // Modern browsers all support AJAX
-            'dom' => true,         // Modern browsers all support DOM
-            'xmlhttpreq' => true,  // Modern browsers all support XMLHttpRequest
+            'frames' => true,
+            'html' => true,
+            'images' => true,
+            'java' => true,
+            'javascript' => true,
+            'tables' => true,
+            'css' => true,
+            'dom' => true,
+            'ajax' => false,  // Set per browser
+            'xmlhttpreq' => true,
+            'rte' => false,  // Rich text editor - set per browser
         ];
 
-        // UTF-8 support
+        // Browser-specific feature detection
+        $major = $this->majorVersion;
+        $minor = $this->minorVersion;
+
+        switch ($this->browser) {
+            case BrowserFamily::InternetExplorer:
+                // IE 5 Mac had limited features
+                if ($major == 5 && str_contains(strtolower($this->userAgent), 'mac')) {
+                    $features['javascript'] = '1.2';
+                    $features['ajax'] = false;
+                    $features['dataurl'] = false;
+                    $features['rte'] = false;
+                }
+                // IE 5 Windows
+                elseif ($major == 5) {
+                    $features['javascript'] = '1.4';
+                    $features['dom'] = true;
+                    $features['ajax'] = false;
+                    $features['rte'] = true;
+                    if ($minor == 5) {
+                        // IE 5.5 specific
+                    }
+                }
+                // IE 6
+                elseif ($major == 6) {
+                    $features['javascript'] = '1.4';
+                    $features['dom'] = true;
+                    $features['ajax'] = false;
+                    $features['rte'] = true;
+                    $features['optgroup'] = true;
+                }
+                // IE 7
+                elseif ($major == 7) {
+                    $features['javascript'] = '1.4';
+                    $features['ajax'] = true;  // AJAX added in IE7
+                    $features['dom'] = true;
+                    $features['rte'] = true;
+                    $features['dataurl'] = false;
+                }
+                // IE 8
+                elseif ($major == 8) {
+                    $features['javascript'] = '1.4';
+                    $features['ajax'] = true;
+                    $features['dom'] = true;
+                    $features['rte'] = true;
+                    $features['dataurl'] = 32768;  // 32KB limit
+                }
+                // IE 9+
+                elseif ($major >= 9) {
+                    $features['javascript'] = '1.4';
+                    $features['ajax'] = true;
+                    $features['dom'] = true;
+                    $features['rte'] = true;
+                    $features['cite'] = true;
+                    $features['dataurl'] = true;
+                }
+                break;
+
+            case BrowserFamily::Opera:
+                // Opera 6
+                if ($major == 6) {
+                    $features['javascript'] = '1.5';
+                    $features['ajax'] = false;
+                    $features['dom'] = false;
+                    $features['iframes'] = true;
+                }
+                // Opera 7
+                elseif ($major == 7) {
+                    $features['javascript'] = '1.5';
+                    $features['ajax'] = false;
+                    $features['dom'] = true;
+                    $features['iframes'] = true;
+                }
+                // Opera 9+
+                elseif ($major >= 9) {
+                    $features['javascript'] = '1.5';
+                    $features['ajax'] = true;  // AJAX added in Opera 9
+                    $features['dom'] = true;
+                    $features['dataurl'] = 4100;  // 4KB limit
+                }
+                break;
+
+            case BrowserFamily::Firefox:
+                $features['ajax'] = true;
+                $features['rte'] = true;
+                break;
+
+            case BrowserFamily::Chrome:
+            case BrowserFamily::Safari:
+            case BrowserFamily::Edge:
+                $features['ajax'] = true;
+                $features['rte'] = true;
+                break;
+        }
+
+        // Mobile browser constraints
+        $lowerAgent = strtolower($this->userAgent);
+
+        // Windows Phone 6-7
+        if (str_contains($lowerAgent, 'windows phone os') &&
+            preg_match('/windows phone os ([67])/', $lowerAgent)) {
+            $features['frames'] = false;
+            $features['javascript'] = false;
+        }
+
+        // Opera Mini
+        if (str_contains($lowerAgent, 'opera mini')) {
+            $features['frames'] = false;
+            // JavaScript may be enabled/disabled in Opera Mini
+        }
+
+        // UTF-8 support from Accept-Charset header
         if (isset($_SERVER['HTTP_ACCEPT_CHARSET'])) {
             $features['utf'] = str_contains(
                 strtolower($_SERVER['HTTP_ACCEPT_CHARSET']),
                 'utf'
             );
+        } else {
+            $features['utf'] = false;
         }
 
         return $features;
@@ -401,7 +528,51 @@ readonly class Browser
 
         // IE quirks
         if ($this->browser === BrowserFamily::InternetExplorer) {
+            $major = $this->majorVersion;
+            $minor = $this->minorVersion;
+            $lowerAgent = strtolower($this->userAgent);
+
+            // All IE versions have these quirks
+            $quirks['cache_ssl_downloads'] = true;
+            $quirks['cache_same_url'] = true;
+            $quirks['break_disposition_filename'] = true;
             $quirks['no_filename_spaces'] = true;
+
+            // IE 5.5 specific
+            if ($major == 5 && $minor == 5) {
+                $quirks['break_disposition_header'] = true;
+            }
+
+            // IE < 7 on Windows has PNG transparency issues
+            if ($major < 7 && str_contains($lowerAgent, 'windows')) {
+                $quirks['png_transparency'] = true;
+            }
+
+            // IE 6 specific quirks
+            if ($major == 6) {
+                $quirks['scrollbar_in_way'] = true;
+                $quirks['broken_multipart_form'] = true;
+                $quirks['windowed_controls'] = true;
+            }
+
+            // IE 5 quirks
+            if ($major == 5) {
+                $quirks['broken_multipart_form'] = true;
+                $quirks['windowed_controls'] = true;
+            }
+        }
+
+        // Opera quirks
+        if ($this->browser === BrowserFamily::Opera) {
+            $major = $this->majorVersion;
+
+            // All Opera versions
+            $quirks['no_filename_spaces'] = true;
+
+            // Opera >= 7
+            if ($major >= 7) {
+                $quirks['double_linebreak_textarea'] = true;
+            }
         }
 
         return $quirks;
@@ -653,7 +824,7 @@ readonly class Browser
      */
     public function hasFeature(string $feature): bool
     {
-        return isset($this->features[$feature]);
+        return !empty($this->features[$feature]);
     }
 
     /**
@@ -678,5 +849,113 @@ readonly class Browser
     public function getQuirk(string $quirk): mixed
     {
         return $this->quirks[$quirk] ?? null;
+    }
+
+    /**
+     * Set a feature value.
+     *
+     * @param string $feature Feature name
+     * @param mixed  $value   Feature value (true/false or specific value)
+     */
+    public function setFeature(string $feature, mixed $value = true): void
+    {
+        if ($value) {
+            $this->features[$feature] = $value;
+        } else {
+            unset($this->features[$feature]);
+        }
+    }
+
+    /**
+     * Set a quirk value.
+     *
+     * @param string $quirk Quirk name
+     * @param mixed  $value Quirk value (typically true/false)
+     */
+    public function setQuirk(string $quirk, mixed $value = true): void
+    {
+        if ($value) {
+            $this->quirks[$quirk] = $value;
+        } else {
+            unset($this->quirks[$quirk]);
+        }
+    }
+
+    /**
+     * Check if MIME type is viewable.
+     *
+     * Determines if the browser can view a given MIME type based on:
+     * 1. HTTP Accept header negotiation
+     * 2. Browser feature detection
+     * 3. Default viewable types allowlist
+     *
+     * @param string $mimetype MIME type to check (e.g., 'image/png')
+     * @return bool True if viewable
+     */
+    public function isViewable(string $mimetype): bool
+    {
+        $mimetype = strtolower($mimetype);
+        [$type, $subtype] = explode('/', $mimetype, 2) + ['', ''];
+
+        // Check HTTP Accept header if present
+        if (!empty($this->accept)) {
+            $wildcard_match = false;
+
+            // 1. Check exact MIME type match
+            if (str_contains($this->accept, $mimetype)) {
+                return true;
+            }
+
+            // 2. Check for wildcard match
+            if (str_contains($this->accept, '*/*')) {
+                $wildcard_match = true;
+                // Non-image types are accepted with */*
+                if ($type !== 'image') {
+                    return true;
+                }
+            }
+
+            // 3. Firefox pjpeg/jpeg compatibility quirk
+            // Mozilla browsers treat image/pjpeg and image/jpeg as same
+            if ($this->browser === BrowserFamily::Firefox &&
+                $mimetype === 'image/pjpeg' &&
+                str_contains($this->accept, 'image/jpeg')) {
+                return true;
+            }
+
+            // 4. Non-image types with wildcard must be explicitly accepted
+            if (!$wildcard_match) {
+                return false;
+            }
+
+            // For images with wildcard, continue to feature check below
+        }
+
+        // If no Accept header or wildcard match for images, check features and allowlist
+
+        // 5. For image types, check if browser has images feature
+        if ($type === 'image') {
+            if (!$this->hasFeature('images')) {
+                return false;
+            }
+
+            // Check against allowlist of image subtypes
+            $imageSubtypes = ['jpeg', 'gif', 'png', 'pjpeg', 'x-png', 'bmp', 'webp', 'svg+xml'];
+            return in_array($subtype, $imageSubtypes, true);
+        }
+
+        // For non-image types without Accept header, use default allowlist
+        $viewable = [
+            'text/plain',
+            'text/html',
+            'text/xml',
+            'application/pdf',
+            'video/mp4',
+            'video/webm',
+            'audio/mpeg',
+            'audio/ogg',
+        ];
+
+        return in_array($mimetype, $viewable, true);
     }
 }
