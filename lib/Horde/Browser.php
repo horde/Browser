@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 1999-2026 Horde LLC (http://www.horde.org/)
  *
@@ -269,7 +270,7 @@ class Horde_Browser
      */
     public function getMajor(): string
     {
-        return (string)$this->_modern->getMajorVersion();
+        return (string) $this->_modern->getMajorVersion();
     }
 
     /**
@@ -401,7 +402,7 @@ class Horde_Browser
      */
     public function setMobile($mobile)
     {
-        $this->_manualMobile = (bool)$mobile;
+        $this->_manualMobile = (bool) $mobile;
     }
 
     /**
@@ -447,7 +448,7 @@ class Horde_Browser
      */
     public function setTablet($tablet)
     {
-        $this->_manualTablet = (bool)$tablet;
+        $this->_manualTablet = (bool) $tablet;
     }
 
     /**
@@ -561,9 +562,9 @@ class Horde_Browser
      */
     public function usingSSLConnection(): bool
     {
-        return ((isset($_SERVER['HTTPS']) &&
-                 ($_SERVER['HTTPS'] == 'on')) ||
-                getenv('SSL_PROTOCOL_VERSION'));
+        return ((isset($_SERVER['HTTPS'])
+                 && ($_SERVER['HTTPS'] == 'on'))
+                || getenv('SSL_PROTOCOL_VERSION'));
     }
 
     /**
@@ -597,9 +598,9 @@ class Horde_Browser
      */
     public static function allowFileUploads(): int
     {
-        if (!ini_get('file_uploads') ||
-            (($dir = ini_get('upload_tmp_dir')) &&
-             !is_writable($dir))) {
+        if (!ini_get('file_uploads')
+            || (($dir = ini_get('upload_tmp_dir'))
+             && !is_writable($dir))) {
             return 0;
         }
 

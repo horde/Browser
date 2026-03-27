@@ -21,6 +21,4 @@ use Horde\Exception\HordeException;
  * @category Horde
  * @package  Browser
  */
-class Exception extends HordeException
-{
-}
+class Exception extends HordeException {}

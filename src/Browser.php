@@ -218,8 +218,8 @@ class Browser
         $this->isTablet = $this->detectTablet($lowerAgent, $this->platform);
 
         // Detect browser and version
-        [$this->browser, $this->majorVersion, $this->minorVersion] =
-            $this->detectBrowser($this->userAgent, $lowerAgent);
+        [$this->browser, $this->majorVersion, $this->minorVersion]
+            = $this->detectBrowser($this->userAgent, $lowerAgent);
 
         // Initialize features and quirks
         $this->features = $this->detectFeatures($accept);
@@ -235,7 +235,7 @@ class Browser
     {
         // Edge (must check before Chrome)
         if (preg_match('/edg(?:e|ios|a)?\/(\d+)\.(\d+)/i', $agent, $matches)) {
-            return [BrowserFamily::Edge, (int)$matches[1], (int)$matches[2]];
+            return [BrowserFamily::Edge, (int) $matches[1], (int) $matches[2]];
         }
 
         // Chrome (must check before Safari)
@@ -243,33 +243,33 @@ class Browser
             // Opera uses Chrome engine
             if (str_contains($lowerAgent, 'opr/') || str_contains($lowerAgent, 'opera')) {
                 if (preg_match('/opr\/(\d+)\.(\d+)/i', $agent, $opMatches)) {
-                    return [BrowserFamily::Opera, (int)$opMatches[1], (int)$opMatches[2]];
+                    return [BrowserFamily::Opera, (int) $opMatches[1], (int) $opMatches[2]];
                 }
-                return [BrowserFamily::Opera, (int)$matches[1], (int)$matches[2]];
+                return [BrowserFamily::Opera, (int) $matches[1], (int) $matches[2]];
             }
-            return [BrowserFamily::Chrome, (int)$matches[1], (int)$matches[2]];
+            return [BrowserFamily::Chrome, (int) $matches[1], (int) $matches[2]];
         }
 
         // Safari
-        if (preg_match('/version\/(\d+)\.(\d+)/i', $agent, $matches) &&
-            str_contains($lowerAgent, 'safari')) {
-            return [BrowserFamily::Safari, (int)$matches[1], (int)$matches[2]];
+        if (preg_match('/version\/(\d+)\.(\d+)/i', $agent, $matches)
+            && str_contains($lowerAgent, 'safari')) {
+            return [BrowserFamily::Safari, (int) $matches[1], (int) $matches[2]];
         }
 
         // Firefox
         if (preg_match('/firefox\/(\d+)\.(\d+)/i', $agent, $matches)) {
-            return [BrowserFamily::Firefox, (int)$matches[1], (int)$matches[2]];
+            return [BrowserFamily::Firefox, (int) $matches[1], (int) $matches[2]];
         }
 
         // Internet Explorer
-        if (preg_match('/msie\s+(\d+)\.(\d+)/i', $agent, $matches) ||
-            preg_match('/trident\/.*rv:(\d+)\.(\d+)/i', $agent, $matches)) {
-            return [BrowserFamily::InternetExplorer, (int)$matches[1], (int)$matches[2]];
+        if (preg_match('/msie\s+(\d+)\.(\d+)/i', $agent, $matches)
+            || preg_match('/trident\/.*rv:(\d+)\.(\d+)/i', $agent, $matches)) {
+            return [BrowserFamily::InternetExplorer, (int) $matches[1], (int) $matches[2]];
         }
 
         // Opera old versions
         if (preg_match('/opera[\/\s](\d+)\.(\d+)/i', $agent, $matches)) {
-            return [BrowserFamily::Opera, (int)$matches[1], (int)$matches[2]];
+            return [BrowserFamily::Opera, (int) $matches[1], (int) $matches[2]];
         }
 
         return [BrowserFamily::Unknown, 0, 0];
@@ -295,8 +295,8 @@ class Browser
         if (str_contains($lowerAgent, 'cros')) {
             return Platform::ChromeOS;
         }
-        if (str_contains($lowerAgent, 'windows') || str_contains($lowerAgent, 'win32') ||
-            str_contains($lowerAgent, 'win64')) {
+        if (str_contains($lowerAgent, 'windows') || str_contains($lowerAgent, 'win32')
+            || str_contains($lowerAgent, 'win64')) {
             return Platform::Windows;
         }
         if (str_contains($lowerAgent, 'macintosh') || str_contains($lowerAgent, 'mac os x')) {
@@ -320,9 +320,9 @@ class Browser
         }
 
         // Additional mobile indicators
-        return str_contains($lowerAgent, 'mobile') ||
-               str_contains($lowerAgent, 'iemobile') ||
-               str_contains($lowerAgent, 'windows phone');
+        return str_contains($lowerAgent, 'mobile')
+               || str_contains($lowerAgent, 'iemobile')
+               || str_contains($lowerAgent, 'windows phone');
     }
 
     /**
@@ -528,8 +528,8 @@ class Browser
         $lowerAgent = strtolower($this->userAgent);
 
         // Windows Phone 6-7
-        if (str_contains($lowerAgent, 'windows phone os') &&
-            preg_match('/windows phone os ([67])/', $lowerAgent)) {
+        if (str_contains($lowerAgent, 'windows phone os')
+            && preg_match('/windows phone os ([67])/', $lowerAgent)) {
             $features['frames'] = false;
             $features['javascript'] = false;
         }
@@ -986,9 +986,9 @@ class Browser
 
             // 3. Firefox pjpeg/jpeg compatibility quirk
             // Mozilla browsers treat image/pjpeg and image/jpeg as same
-            if ($this->browser === BrowserFamily::Firefox &&
-                $mimetype === 'image/pjpeg' &&
-                str_contains($this->accept, 'image/jpeg')) {
+            if ($this->browser === BrowserFamily::Firefox
+                && $mimetype === 'image/pjpeg'
+                && str_contains($this->accept, 'image/jpeg')) {
                 return true;
             }
 

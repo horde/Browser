@@ -209,19 +209,19 @@ class BrowserTest extends TestCase
         return [
             'Googlebot' => [
                 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
-                'Googlebot'
+                'Googlebot',
             ],
             'Bingbot' => [
                 'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)',
-                'Bingbot'
+                'Bingbot',
             ],
             'Yahoo Slurp' => [
                 'Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)',
-                'Slurp'
+                'Slurp',
             ],
             'Baiduspider' => [
                 'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)',
-                'Baiduspider'
+                'Baiduspider',
             ],
         ];
     }
@@ -245,27 +245,27 @@ class BrowserTest extends TestCase
         return [
             'Windows 10' => [
                 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                Platform::Windows
+                Platform::Windows,
             ],
             'macOS' => [
                 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2) AppleWebKit/605.1.15',
-                Platform::MacOS
+                Platform::MacOS,
             ],
             'Linux' => [
                 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36',
-                Platform::Linux
+                Platform::Linux,
             ],
             'iPhone' => [
                 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15',
-                Platform::IPhone
+                Platform::IPhone,
             ],
             'iPad' => [
                 'Mozilla/5.0 (iPad; CPU OS 17_2 like Mac OS X) AppleWebKit/605.1.15',
-                Platform::IPad
+                Platform::IPad,
             ],
             'Android' => [
                 'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36',
-                Platform::Android
+                Platform::Android,
             ],
         ];
     }
