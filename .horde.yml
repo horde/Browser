@@ -38,3 +38,7 @@ dependencies:
       horde/Translation: ^3
       horde/Util: ^3
 vendor: horde
+
+quality:
+  phpstan:
+    level: 9

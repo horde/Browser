@@ -11,7 +11,7 @@ declare(strict_types=1);
  * @package  Browser
  */
 
-namespace Horde\Browser\Test;
+namespace Horde\Browser\Test\Unit;
 
 use Horde\Browser\{Browser, BrowserFamily, Platform};
 use PHPUnit\Framework\TestCase;
