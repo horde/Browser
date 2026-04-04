@@ -15,6 +15,7 @@
 use Horde\Browser\Browser as ModernBrowser;
 use Horde\Browser\BrowserFamily;
 use Horde\Browser\Platform;
+use Horde\Util\ArrayUtils;
 
 /**
  * Backward-compatible wrapper around modern Horde\Browser\Browser.
@@ -654,21 +655,52 @@ class Horde_Browser
             );
         }
 
-        if (!isset($_FILES[$field])) {
-            throw new Horde_Browser_Exception(
-                Horde_Browser_Translation::t("No file uploaded"),
-                UPLOAD_ERR_NO_FILE
-            );
-        }
+        // Handle both simple field names and nested array notation
+        // Simple: "photo" -> $_FILES['photo']
+        // Nested: "object[photo][new]" -> $_FILES['object']['name']['photo']['new']
+        $hasNestedArrayNotation = strpos($field, '[') !== false;
 
-        $error = $_FILES[$field]['error'];
-        if (is_array($error)) {
-            $error = reset($error);
-        }
+        if ($hasNestedArrayNotation) {
+            // Parse nested array notation (e.g., "object[photo][new]")
+            // This is used by Horde_Form when rendering nested form fields
+            ArrayUtils::getArrayParts($field, $base, $keys);
 
-        $tmp_name = $_FILES[$field]['tmp_name'] ?? '';
-        if (is_array($tmp_name)) {
-            $tmp_name = reset($tmp_name);
+            // Navigate the nested $_FILES array structure
+            $keys_path = array_merge([$base, 'error'], $keys);
+            $error = ArrayUtils::getElement($_FILES, $keys_path);
+
+            // getElement returns false if the nested key doesn't exist
+            if ($error === false || $error === null) {
+                throw new Horde_Browser_Exception(
+                    Horde_Browser_Translation::t("No file uploaded"),
+                    UPLOAD_ERR_NO_FILE
+                );
+            }
+
+            // Get tmp_name for nested field
+            $keys_path = array_merge([$base, 'tmp_name'], $keys);
+            $tmp_name = ArrayUtils::getElement($_FILES, $keys_path);
+            if ($tmp_name === false) {
+                $tmp_name = '';
+            }
+        } else {
+            // Simple field name (backwards compatible with existing code)
+            if (!isset($_FILES[$field])) {
+                throw new Horde_Browser_Exception(
+                    Horde_Browser_Translation::t("No file uploaded"),
+                    UPLOAD_ERR_NO_FILE
+                );
+            }
+
+            $error = $_FILES[$field]['error'];
+            if (is_array($error)) {
+                $error = reset($error);
+            }
+
+            $tmp_name = $_FILES[$field]['tmp_name'] ?? '';
+            if (is_array($tmp_name)) {
+                $tmp_name = reset($tmp_name);
+            }
         }
 
         switch ($error) {
