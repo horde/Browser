@@ -34,6 +34,7 @@ dependencies:
   required:
     php: ^7.4 || ^8
     composer:
+      horde/http: *
       horde/Exception: ^3
       horde/Translation: ^3
       horde/Util: ^3
@@ -41,3 +42,6 @@ vendor: horde
 quality:
   phpstan:
     level: 9
+keywords:
+  - capability_detection
+  - file_upload
