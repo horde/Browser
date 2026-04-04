@@ -125,7 +125,7 @@ use Horde\Util\ArrayUtils;
  * @copyright 1999-2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL-2.1
  * @package   Browser
- * @see \Horde\Browser\Browser For modern implementation with native values
+ * @see ModernBrowser For modern implementation with native values
  */
 class Horde_Browser
 {
@@ -208,8 +208,8 @@ class Horde_Browser
      * which returns distinct `BrowserFamily` enum values.
      *
      * @return string Legacy browser name
-     * @see \Horde\Browser\Browser::getBrowser() For native enum value
-     * @see \Horde\Browser\Browser::getBrowserName() For native string value
+     * @see ModernBrowser::getBrowser() For native enum value
+     * @see ModernBrowser::getBrowserName() For native string value
      */
     public function getBrowser(): string
     {
@@ -267,7 +267,7 @@ class Horde_Browser
      * which returns int for proper numeric comparison.
      *
      * @return string Major version as string
-     * @see \Horde\Browser\Browser::getMajorVersion() For native integer value
+     * @see ModernBrowser::getMajorVersion() For native integer value
      */
     public function getMajor(): string
     {
@@ -288,7 +288,7 @@ class Horde_Browser
      * **Same as modern API**: `\Horde\Browser\Browser::getMinorVersion()`
      *
      * @return string|int Minor version (usually int, for BC may be mixed)
-     * @see \Horde\Browser\Browser::getMinorVersion() For guaranteed integer
+     * @see ModernBrowser::getMinorVersion() For guaranteed integer
      */
     public function getMinor()
     {
@@ -339,8 +339,8 @@ class Horde_Browser
      * which returns distinct `Platform` enum values like `Platform::IPhone`.
      *
      * @return string Legacy platform name
-     * @see \Horde\Browser\Browser::getPlatform() For native enum value
-     * @see \Horde\Browser\Browser::getPlatformName() For native string value
+     * @see ModernBrowser::getPlatform() For native enum value
+     * @see ModernBrowser::getPlatformName() For native string value
      */
     public function getPlatform(): string
     {
@@ -428,7 +428,7 @@ class Horde_Browser
      * @return bool True if tablet
      * @see isMobile() To check for mobile phones
      * @see setTablet() To manually override detection
-     * @see \Horde\Browser\Browser::tablet() For same behavior
+     * @see ModernBrowser::tablet() For same behavior
      */
     public function isTablet(): bool
     {
