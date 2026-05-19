@@ -157,6 +157,20 @@
     test(browser): add PHPUnit test coverage for legacy Browser class
     Fix composer.json for packagist.org
     Development mode for Browser-3.0.0alpha5
+3.0.0-RC1:
+  api: 3.0.0-RC1
+  state:
+    release: RC
+    api: RC
+  date: 2026-05-19
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    doc: Update migration guide
+    chore: add keywords
+    feat: PSR-7 based utilities
+    style: php-cs-fixer
 2.0.15:
   api: 1.0.0
   state:

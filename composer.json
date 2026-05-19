@@ -16,10 +16,15 @@
             "role": "developer"
         }
     ],
-    "time": "2026-04-04",
+    "keywords": [
+        "capability_detection",
+        "file_upload"
+    ],
+    "time": "2026-05-19",
     "repositories": [],
     "require": {
-        "php": "^7.4 || ^8",
+        "php": "^8",
+        "horde/http": "* || dev-FRAMEWORK_6_0",
         "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/translation": "^3 || dev-FRAMEWORK_6_0",
         "horde/util": "^3 || dev-FRAMEWORK_6_0"

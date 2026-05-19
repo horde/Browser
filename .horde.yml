@@ -22,10 +22,10 @@ authors:
     active: false
     role: developer
 version:
-  release: 3.0.0-beta2
+  release: 3.0.0-RC1
   api: 3.0.0alpha1
 state:
-  release: beta
+  release: RC
   api: alpha
 license:
   identifier: LGPL-2.1-only
@@ -34,7 +34,7 @@ dependencies:
   required:
     php: ^8
     composer:
-      horde/http: *
+      horde/http: '*'
       horde/Exception: ^3
       horde/Translation: ^3
       horde/Util: ^3
