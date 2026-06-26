@@ -60,3 +60,9 @@ run-tests.log
 # Added by horde-components QC --fix-qc-issues
 # Local PHP configuration files
 **/*.local.php
+
+# Added by horde-components QC --fix-qc-issues
+# Horde installer plugin runtime data
+/var/
+# Horde installer plugin web-accessible directory
+/web/

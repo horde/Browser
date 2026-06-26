@@ -1,162 +1,14 @@
 ---
-3.0.0alpha5:
-  api: 3.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2022-11-04
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
-3.0.0alpha4:
-  api: 3.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2022-11-04
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [rla] Release for PHP 8.
-    |+
-3.0.0alpha3:
-  api: 3.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2021-03-13
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
-3.0.0alpha2:
-  api: 3.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2021-02-24
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
-3.0.0alpha1:
-  api: 3.0.0alpha1
+3.0.0:
+  api: 3.0.0
   state:
     release: stable
     api: stable
-  date: 2021-02-23
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
-    [mjr] Fix uploads being disabled when post_max_upload is set to 0 in php.ini.
-    
-3.0.0-beta2:
-  api: 3.0.0-beta2
-  state:
-    release: beta
-    api: beta
-  date: 2026-04-04
+  date: 2026-06-26
   license:
     identifier: LGPL-2.1-only
     uri: https://spdx.org/licenses/LGPL-2.1-only.html
-  notes: |-
-    fix: There's two potential form formats for file uploads. Support both.
-3.0.0-beta1:
-  api: 3.0.0-beta1
-  state:
-    release: beta
-    api: beta
-  date: 2026-03-27
-  license:
-    identifier: LGPL-2.1-only
-    uri: https://spdx.org/licenses/LGPL-2.1-only.html
-  notes: |-
-    test: Remove bootstrap file
-    style: php-cs-fixer
-    chore: php-cs-fixer config
-3.0.0-alpha10:
-  api: 3.0.0-alpha10
-  state:
-    release: alpha
-    api: alpha
-  date: 2026-03-12
-  license:
-    identifier: LGPL-2.1-only
-    uri: https://spdx.org/licenses/LGPL-2.1-only.html
-  notes: |-
-    feat(browser): restore alpha4 features/quirks and add unsupported browser detection
-3.0.0-alpha9:
-  api: 3.0.0-alpha9
-  state:
-    release: alpha
-    api: alpha
-  date: 2026-03-09
-  license:
-    identifier: LGPL-2.1-only
-    uri: https://spdx.org/licenses/LGPL-2.1-only.html
-  notes: |-
-    fix: User issue with turba file upload
-    doc: Add a migration guide from 2.x to 3.0
-    test: Increase unit test coverage for quirks detection.
-    fix(browser): restore browser-specific handling in downloadHeaders()
-    fix(browser): restore wasFileUploaded() exception behavior for BC
-3.0.0-alpha8:
-  api: 3.0.0-alpha8
-  state:
-    release: alpha
-    api: alpha
-  date: 2026-03-07
-  license:
-    identifier: LGPL-2.1-only
-    uri: https://spdx.org/licenses/LGPL-2.1-only.html
-  notes: |-
-    fix(shim): remove strict void return types for backward compatibility
-    test(browser): add tests demonstrating native vs legacy value differences
-    docs(browser): extensively document native vs legacy value differences
-    refactor(browser): convert lib/ to wrapper around modern implementation
-    feat(browser): implement Modern PSR-4 Browser with improved detection
-    test(browser): add PHPUnit test coverage for legacy Browser class
-    Fix composer.json for packagist.org
-    Development mode for Browser-3.0.0alpha5
-3.0.0-alpha7:
-  api: 3.0.0-alpha7
-  state:
-    release: alpha
-    api: alpha
-  date: 2026-03-07
-  license:
-    identifier: LGPL-2.1-only
-    uri: https://spdx.org/licenses/LGPL-2.1-only.html
-  notes: |-
-    fix(shim): remove strict void return types for backward compatibility
-    test(browser): add tests demonstrating native vs legacy value differences
-    docs(browser): extensively document native vs legacy value differences
-    refactor(browser): convert lib/ to wrapper around modern implementation
-    feat(browser): implement Modern PSR-4 Browser with improved detection
-    test(browser): add PHPUnit test coverage for legacy Browser class
-    Fix composer.json for packagist.org
-    Development mode for Browser-3.0.0alpha5
-3.0.0-alpha6:
-  api: 3.0.0-alpha6
-  state:
-    release: alpha
-    api: alpha
-  date: 2026-03-07
-  license:
-    identifier: LGPL-2.1-only
-    uri: https://spdx.org/licenses/LGPL-2.1-only.html
-  notes: |-
-    fix(shim): remove strict void return types for backward compatibility
-    test(browser): add tests demonstrating native vs legacy value differences
-    docs(browser): extensively document native vs legacy value differences
-    refactor(browser): convert lib/ to wrapper around modern implementation
-    feat(browser): implement Modern PSR-4 Browser with improved detection
-    test(browser): add PHPUnit test coverage for legacy Browser class
-    Fix composer.json for packagist.org
-    Development mode for Browser-3.0.0alpha5
+  notes: 'chore: Update workflow dependency'
 3.0.0-RC1:
   api: 3.0.0-RC1
   state:
@@ -166,11 +18,127 @@
   license:
     identifier: LGPL-2.1-only
     uri: https://spdx.org/licenses/LGPL-2.1-only.html
-  notes: |-
-    doc: Update migration guide
-    chore: add keywords
-    feat: PSR-7 based utilities
-    style: php-cs-fixer
+  notes: "doc: Update migration guide\nchore: add keywords\nfeat: PSR-7 based utilities\nstyle: php-cs-fixer"
+3.0.0-beta2:
+  api: 3.0.0-beta2
+  state:
+    release: beta
+    api: beta
+  date: 2026-04-04
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: 'fix: There''s two potential form formats for file uploads. Support both.'
+3.0.0-beta1:
+  api: 3.0.0-beta1
+  state:
+    release: beta
+    api: beta
+  date: 2026-03-27
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: "test: Remove bootstrap file\nstyle: php-cs-fixer\nchore: php-cs-fixer config"
+3.0.0-alpha10:
+  api: 3.0.0-alpha10
+  state:
+    release: alpha
+    api: alpha
+  date: 2026-03-12
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: 'feat(browser): restore alpha4 features/quirks and add unsupported browser detection'
+3.0.0-alpha9:
+  api: 3.0.0-alpha9
+  state:
+    release: alpha
+    api: alpha
+  date: 2026-03-09
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: "fix: User issue with turba file upload\ndoc: Add a migration guide from 2.x to 3.0\ntest: Increase unit test coverage for quirks detection.\nfix(browser): restore browser-specific handling in downloadHeaders()\nfix(browser): restore wasFileUploaded() exception behavior for BC"
+3.0.0-alpha8:
+  api: 3.0.0-alpha8
+  state:
+    release: alpha
+    api: alpha
+  date: 2026-03-07
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: "fix(shim): remove strict void return types for backward compatibility\ntest(browser): add tests demonstrating native vs legacy value differences\ndocs(browser): extensively document native vs legacy value differences\nrefactor(browser): convert lib/ to wrapper around modern implementation\nfeat(browser): implement Modern PSR-4 Browser with improved detection\ntest(browser): add PHPUnit test coverage for legacy Browser class\nFix composer.json for packagist.org\nDevelopment mode for Browser-3.0.0alpha5"
+3.0.0-alpha7:
+  api: 3.0.0-alpha7
+  state:
+    release: alpha
+    api: alpha
+  date: 2026-03-07
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: "fix(shim): remove strict void return types for backward compatibility\ntest(browser): add tests demonstrating native vs legacy value differences\ndocs(browser): extensively document native vs legacy value differences\nrefactor(browser): convert lib/ to wrapper around modern implementation\nfeat(browser): implement Modern PSR-4 Browser with improved detection\ntest(browser): add PHPUnit test coverage for legacy Browser class\nFix composer.json for packagist.org\nDevelopment mode for Browser-3.0.0alpha5"
+3.0.0-alpha6:
+  api: 3.0.0-alpha6
+  state:
+    release: alpha
+    api: alpha
+  date: 2026-03-07
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: "fix(shim): remove strict void return types for backward compatibility\ntest(browser): add tests demonstrating native vs legacy value differences\ndocs(browser): extensively document native vs legacy value differences\nrefactor(browser): convert lib/ to wrapper around modern implementation\nfeat(browser): implement Modern PSR-4 Browser with improved detection\ntest(browser): add PHPUnit test coverage for legacy Browser class\nFix composer.json for packagist.org\nDevelopment mode for Browser-3.0.0alpha5"
+3.0.0alpha5:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2022-11-04
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: ''
+3.0.0alpha4:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2022-11-04
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: "[rla] Release for PHP 8.\n|+\n"
+3.0.0alpha3:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2021-03-13
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: ''
+3.0.0alpha2:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2021-02-24
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: ''
+3.0.0alpha1:
+  api: 3.0.0alpha1
+  state:
+    release: stable
+    api: stable
+  date: 2021-02-23
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: "[mjr] Fix uploads being disabled when post_max_upload is set to 0 in php.ini.\n\n"
 2.0.15:
   api: 1.0.0
   state:
@@ -180,8 +148,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Mark PHP 7 as supported.
+  notes: "[jan] Mark PHP 7 as supported.\n"
 2.0.14:
   api: 1.0.0
   state:
@@ -191,8 +158,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Filter out control characters from file names when sending download headers.
+  notes: "[jan] Filter out control characters from file names when sending download headers.\n"
 2.0.13:
   api: 1.0.0
   state:
@@ -202,8 +168,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Update German translation.
+  notes: "[jan] Update German translation.\n"
 2.0.12:
   api: 1.0.0
   state:
@@ -213,8 +178,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Update Greek translation (Limperis Antonis <limperis@cti.gr>).
+  notes: "[jan] Update Greek translation (Limperis Antonis <limperis@cti.gr>).\n"
 2.0.11:
   api: 1.0.0
   state:
@@ -224,8 +188,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mjr] Don't set the empty_file_input_value quirk for recent Safari versions (Bug #14207).
+  notes: "[mjr] Don't set the empty_file_input_value quirk for recent Safari versions (Bug #14207).\n"
 2.0.10:
   api: 1.0.0
   state:
@@ -235,9 +198,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Fix Composer file.
-    [jan] Updated UK translation.
+  notes: "[jan] Fix Composer file.\n[jan] Updated UK translation.\n"
 2.0.9:
   api: 1.0.0
   state:
@@ -247,8 +208,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Fix issues with certain locales like Turkish.
+  notes: "[jan] Fix issues with certain locales like Turkish.\n"
 2.0.8:
   api: 1.0.0
   state:
@@ -258,8 +218,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Consider all user agents with "bot" in the name as robots.
+  notes: "[jan] Consider all user agents with \"bot\" in the name as robots.\n"
 2.0.7:
   api: 1.0.0
   state:
@@ -269,8 +228,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mms] Correctly identify MSIE 11.
+  notes: "[mms] Correctly identify MSIE 11.\n"
 2.0.6:
   api: 1.0.0
   state:
@@ -280,9 +238,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mms] Fix checking for upload errors if an array of files was uploaded.
-    [mms] Catch newer PHP upload errors when checking for upload data.
+  notes: "[mms] Fix checking for upload errors if an array of files was uploaded.\n[mms] Catch newer PHP upload errors when checking for upload data.\n"
 2.0.5:
   api: 1.0.0
   state:
@@ -292,8 +248,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mms] Detect Internet Explorer 11.
+  notes: "[mms] Detect Internet Explorer 11.\n"
 2.0.4:
   api: 1.0.0
   state:
@@ -303,8 +258,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mms] Detect stock N900 browser as mobile browser (Request #12613; Thomas Jarosch <thomas.jarosch@intra2net.com>).
+  notes: "[mms] Detect stock N900 browser as mobile browser (Request #12613; Thomas Jarosch <thomas.jarosch@intra2net.com>).\n"
 2.0.3:
   api: 1.0.0
   state:
@@ -314,9 +268,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Update Basque translation (Ibon Igartua <ibon.igartua@ehu.es>).
-    [mjr] Properly detect mobile Chrome on iOS (Bug #11868).
+  notes: "[jan] Update Basque translation (Ibon Igartua <ibon.igartua@ehu.es>).\n[mjr] Properly detect mobile Chrome on iOS (Bug #11868).\n"
 2.0.2:
   api: 1.0.0
   state:
@@ -326,8 +278,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mms] Add tablet detection/reporting.
+  notes: "[mms] Add tablet detection/reporting.\n"
 2.0.1:
   api: 1.0.0
   state:
@@ -337,52 +288,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Update Dutch translation (Arjen de Korte <build+horde@de-korte.org>).
-2.0.0beta2:
-  api: 1.0.0
-  state:
-    release: beta
-    api: stable
-  date: 2012-08-29
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mms] Improved detection of mobile browsers (leena.heino@uta.fi, Request #11328).
-2.0.0beta1:
-  api: 1.0.0
-  state:
-    release: beta
-    api: stable
-  date: 2012-07-19
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    First beta release for Horde 5.
-2.0.0alpha1:
-  api: 1.0.0
-  state:
-    release: alpha
-    api: stable
-  date: 2012-07-05
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    First alpha release for Horde 5.
-2.0.0RC1:
-  api: 1.0.0
-  state:
-    release: beta
-    api: stable
-  date: 2012-10-26
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mms] Fix error message displaying the maximimum allowed file upload size.
+  notes: "[jan] Update Dutch translation (Arjen de Korte <build+horde@de-korte.org>).\n"
 2.0.0:
   api: 1.0.0
   state:
@@ -392,8 +298,47 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    First stable release for Horde 5.
+  notes: "First stable release for Horde 5.\n"
+2.0.0RC1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: stable
+  date: 2012-10-26
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: "[mms] Fix error message displaying the maximimum allowed file upload size.\n"
+2.0.0beta2:
+  api: 1.0.0
+  state:
+    release: beta
+    api: stable
+  date: 2012-08-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: "[mms] Improved detection of mobile browsers (leena.heino@uta.fi, Request #11328).\n"
+2.0.0beta1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: stable
+  date: 2012-07-19
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: "First beta release for Horde 5.\n"
+2.0.0alpha1:
+  api: 1.0.0
+  state:
+    release: alpha
+    api: stable
+  date: 2012-07-05
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: "First alpha release for Horde 5.\n"
 1.0.8:
   api: 1.0.0
   state:
@@ -403,8 +348,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mms] Add recognition of Firefox for Android as a mobile browser (Request #11216).
+  notes: "[mms] Add recognition of Firefox for Android as a mobile browser (Request #11216).\n"
 1.0.7:
   api: 1.0.0
   state:
@@ -414,8 +358,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mms] Added the 'ajax' browser feature.
+  notes: "[mms] Added the 'ajax' browser feature.\n"
 1.0.6:
   api: 1.0.0
   state:
@@ -425,10 +368,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mms] Fix upload_tmp_dir checking (Bug #10976).
-    [mms] Update dataurl and cite capabilities for Internet Explorer.
-    [jan] Update utf capability for Firefox 10+.
+  notes: "[mms] Fix upload_tmp_dir checking (Bug #10976).\n[mms] Update dataurl and cite capabilities for Internet Explorer.\n[jan] Update utf capability for Firefox 10+.\n"
 1.0.5:
   api: 1.0.0
   state:
@@ -438,8 +378,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Update capabilities for recent Blackberry devices.
+  notes: "[jan] Update capabilities for recent Blackberry devices.\n"
 1.0.4:
   api: 1.0.0
   state:
@@ -449,8 +388,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Fix empty_file_input_value quirk for Chrome browsers (Bug #8438).
+  notes: "[jan] Fix empty_file_input_value quirk for Chrome browsers (Bug #8438).\n"
 1.0.3:
   api: 1.0.0
   state:
@@ -460,8 +398,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Update Latvian translation.
+  notes: "[jan] Update Latvian translation.\n"
 1.0.2:
   api: 1.0.0
   state:
@@ -471,9 +408,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Update Lithuanian translation.
-    [jan] Update Brazilian Portuguese translation.
+  notes: "[jan] Update Lithuanian translation.\n[jan] Update Brazilian Portuguese translation.\n"
 1.0.1:
   api: 1.0.0
   state:
@@ -483,69 +418,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [jan] Updated Slovak translation.
-    [jan] Updated Spanish translation.
-1.0.0beta1:
-  api: 1.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-16
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    First beta release for Horde 4.
-1.0.0alpha1:
-  api: 1.0.0
-  state:
-    release: alpha
-    api: alpha
-  date: 2011-03-08
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    First alpha release for Horde 4.
-    Add Horde_Browser::setMobile().
-    Remove PEAR and horde/Core dependencies.
-    Remove Horde_Browser::escapeJSCode().
-    Add Horde_Browser_Exception.
-1.0.0RC3:
-  api: 1.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-29
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    Add missing replace task.
-1.0.0RC2:
-  api: 1.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-29
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    Second release candidate for Horde 4.
-    Add translations.
-1.0.0RC1:
-  api: 1.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-22
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    First release candidate for Horde 4.
+  notes: "[jan] Updated Slovak translation.\n[jan] Updated Spanish translation.\n"
 1.0.0:
   api: 1.0.0
   state:
@@ -555,8 +428,57 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    First stable release for Horde 4.
+  notes: "First stable release for Horde 4.\n"
+1.0.0RC3:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: "Add missing replace task.\n"
+1.0.0RC2:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: "Second release candidate for Horde 4.\nAdd translations.\n"
+1.0.0RC1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: "First release candidate for Horde 4.\n"
+1.0.0beta1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-16
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: "First beta release for Horde 4.\n"
+1.0.0alpha1:
+  api: 1.0.0
+  state:
+    release: alpha
+    api: alpha
+  date: 2011-03-08
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: "First alpha release for Horde 4.\nAdd Horde_Browser::setMobile().\nRemove PEAR and horde/Core dependencies.\nRemove Horde_Browser::escapeJSCode().\nAdd Horde_Browser_Exception.\n"
 0.0.2:
   api: 0.0.2
   state:
@@ -566,10 +488,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    Converted to package.xml 2.0 for pear.horde.org
-    Add Opera Mobile detection (Request #4953)
-    Add Grundig and NetFront detection (Request #5269)
+  notes: "Converted to package.xml 2.0 for pear.horde.org\nAdd Opera Mobile detection (Request #4953)\nAdd Grundig and NetFront detection (Request #5269)\n"
 0.0.1:
   api: 0.0.1
   state:
@@ -579,5 +498,4 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    Initial packaging
+  notes: "Initial packaging\n"
