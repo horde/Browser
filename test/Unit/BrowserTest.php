@@ -325,6 +325,60 @@ class BrowserTest extends TestCase
         $this->assertSame($userAgent, $browser->getUserAgent());
     }
 
+    #[DataProvider('companionUserAgentProvider')]
+    public function testCompanionUserAgents(string $original, string $current, bool $expected): void
+    {
+        $browser = new Browser($current);
+
+        self::assertSame($expected, $browser->isCompanionOf($original));
+        self::assertSame($current, $browser->getUserAgent());
+        if ($expected) {
+            self::assertSame(BrowserFamily::Unknown, $browser->getBrowser());
+        }
+    }
+
+    public static function companionUserAgentProvider(): array
+    {
+        $safari = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15';
+        $helper = 'com.apple.WebKit.Networking/21622.1.22.11.14 Network/5569.1.3 macOS/26.0';
+
+        return [
+            'macOS 26 icons' => [$safari, $helper, true],
+            'macOS 26.2 icons' => [$safari, 'com.apple.WebKit.Networking/21623.1.14.11.9 Network/5569.60.39.0.3 macOS/26.2', true],
+            'macOS 15 icons' => [$safari, 'com.apple.WebKit.Networking/20621.1.15.11.10 Network/4277.101.3 macOS/15.4.1', true],
+            'macOS 26 CFNetwork' => [$safari, 'com.apple.WebKit.Networking/21622.2.11.11.9 CFNetwork/3860.200.71 Darwin/25.1.0', true],
+            'older CFNetwork architecture' => [$safari, 'com.apple.WebKit.Networking/12603.3.8 CFNetwork/811.5.4 Darwin/16.7.0 (x86_64)', true],
+            'iPhone Safari' => [
+                'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1',
+                $helper,
+                true,
+            ],
+            'iPad Safari' => [
+                'Mozilla/5.0 (iPad; CPU OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1',
+                $helper,
+                true,
+            ],
+            'Chrome is not Safari' => [
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
+                $helper,
+                false,
+            ],
+            'Firefox' => ['Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:140.0) Gecko/20100101 Firefox/140.0', $helper, false],
+            'non-Apple Safari' => ['Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2', $helper, false],
+            'no original browser' => ['', $helper, false],
+            'not symmetric' => [$helper, $safari, false],
+            'ordinary browser change' => [$safari, str_replace('Version/26.0', 'Version/26.1', $safari), false],
+            'not an equality check' => [$safari, $safari, false],
+            'unverified extension' => [$safari, 'NetworkingExtension/8618.2.12.10.9 CFNetwork/1496.0.7 Darwin/23.5.0', false],
+            'arbitrary CFNetwork client' => [$safari, 'OtherApp/1.0 CFNetwork/3860.200.71 Darwin/25.1.0', false],
+            'incomplete helper' => [$safari, 'com.apple.WebKit.Networking/21622.1', false],
+            'wrong token combination' => [$safari, 'com.apple.WebKit.Networking/21622.1 CFNetwork/3860.200.71 macOS/26.1', false],
+            'unrecognized suffix' => [$safari, $helper . ' OtherApp/1.0', false],
+            'trailing newline' => [$safari, $helper . "\n", false],
+            'prefixed helper' => [$safari, 'OtherApp ' . $helper, false],
+        ];
+    }
+
     /**
      * Test empty user agent handling
      */
