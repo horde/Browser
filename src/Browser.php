@@ -16,7 +16,7 @@ namespace Horde\Browser;
 /**
  * Modern browser detection and capability information.
  *
- * Provides improved browser, platform, and device type detection
+ * Provides improved browser, platform and device type detection
  * with modern user agent parsing.
  *
  * ## Native vs Legacy Values
@@ -858,6 +858,37 @@ class Browser
     public function getUserAgent(): string
     {
         return $this->userAgent;
+    }
+
+    /**
+     * Whether this request's agent is a known helper of the original browser.
+     *
+     * Currently this check is apple specific:
+     * Some non-navigational HTTP requests use a separate user agent different
+     * from the main user agent used in GET requests.
+     *
+     * This relationship is directional. Callers must
+     * decide which requests may use it and retain the original user agent.
+     */
+    public function isCompanionOf(string $originalUserAgent): bool
+    {
+        if (!preg_match(
+            '~\Acom\.apple\.WebKit\.Networking/\d+(?:\.\d+)* '
+            . '(?:Network/\d+(?:\.\d+)* macOS/\d+(?:\.\d+)*'
+            . '|CFNetwork/\d+(?:\.\d+)* Darwin/\d+(?:\.\d+)*(?: \((?:x86_64|arm64)\))?)\z~',
+            $this->userAgent
+        )) {
+            return false;
+        }
+
+        $original = new self($originalUserAgent);
+
+        return $original->isBrowser(BrowserFamily::Safari)
+            && in_array($original->getPlatform(), [
+                Platform::MacOS,
+                Platform::IPhone,
+                Platform::IPad,
+            ], true);
     }
 
     /**
